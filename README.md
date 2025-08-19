@@ -1,2 +1,2 @@
-# fiap-tech-challenge-parte3-
+# fiap-tech-challenge-parte3
 Desenvolvimento de uma API RESTful que garante o agendamento eficaz de consultas, o gerenciamento do histórico de pacientes e o envio de lembretes automáticos para garantir a presença dos pacientes nas consultas. Este sistema vai ser acessível a diferentes tipos de usuários (médicos, enfermeiros e pacientes), com acesso controlado e funcionalidades específicas para cada perfil.
