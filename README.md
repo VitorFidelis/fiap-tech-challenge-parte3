@@ -70,31 +70,15 @@ Preencha esse arquivo **.env** criado, com as credenciais que são utilizadas pa
 e RabbitMQ de sua maquina:
 
 ```Text
-# Agendamento DB
-DB_AGENDAMENTO_NAME=
-DB_AGENDAMENTO_USER=
-DB_AGENDAMENTO_PASSWORD=
-DB_AGENDAMENTO_PORT=
+# Configuração PostgreSQL (todos os serviços usam)
+POSTGRES_USER=info_user_name
+POSTGRES_PASSWORD=info_password
 
-# Notificação DB
-DB_NOTIFICACAO_NAME=
-DB_NOTIFICACAO_USER=
-DB_NOTIFICACAO_PASSWORD=
-DB_NOTIFICACAO_PORT=
-
-# Histórico DB
-DB_HISTORICO_NAME=
-DB_HISTORICO_USER=
-DB_HISTORICO_PASSWORD=
-DB_HISTORICO_PORT=
-
-# RabbitMQ
-RABBITMQ_USER=
-RABBITMQ_PASSWORD=
-RABBITMQ_PORT=
-RABBITMQ_MANAGEMENT_PORT=
+# Configuração RabbitMQ
+RABBITMQ_USER=info_user_name
+RABBITMQ_PASSWORD=info_password
 ```
-Com essas informações preenchidas o docker-compose.yml consegue acessar as bases de dados.
+Com essas informações preenchidas o docker-compose.yml consegue criar as bases de dados no postgreSQL
 
 ### Execute com Docker compose
 
@@ -105,6 +89,41 @@ Se você tem docker e docker compose instalados, você pode executar apenas a ex
 ````Shell
   docker-compose.yml up
 ````
+
+Depois do comando a cima, podemos validar se os containers estão em execução:
+
+```Shell
+  docker compose ps
+```
+
+Outra forma de testar se os containers estão em execução é atraves de um Script em bash,
+disponibilizado na raiz do projeto ***test_services.sh***.
+
+```Shell
+  ./test_services.sh
+```
+
+Ao executar o comando a cima a saida esperada do teste é:
+
+```Texte
+🔎 Testando containers...
+db-agendamento    Up 30 seconds (healthy)
+db-notificacao    Up 30 seconds (healthy)
+db-historico      Up 30 seconds (healthy)
+rabbitmq          Up 30 seconds (healthy)
+
+⏳ Testando conexão ao banco agendamento_db no container db-agendamento...
+✅ agendamento_db OK
+⏳ Testando conexão ao banco notificacao_db no container db-notificacao...
+✅ notificacao_db OK
+⏳ Testando conexão ao banco historico_db no container db-historico...
+✅ historico_db OK
+
+⏳ Testando RabbitMQ...
+✅ RabbitMQ OK (painel acessível em http://localhost:15672)
+
+🚀 Testes finalizados!
+```
 
 ### Executar com a linha de comando spring-boot:run
 
