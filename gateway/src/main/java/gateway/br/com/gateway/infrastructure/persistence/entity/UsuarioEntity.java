@@ -31,7 +31,7 @@ public class UsuarioEntity {
     private TipoUsuarioEntity tipoUsuario;
 
     public UsuarioEntity() {
-        this.id = id;
+
     }
 
     public UsuarioEntity(UUID id, String nome, String sobrenome, String email, String senha, Boolean ativo, TipoUsuarioEntity tipoUsuario) {
@@ -40,7 +40,7 @@ public class UsuarioEntity {
         this.sobrenome = sobrenome;
         this.email = email;
         this.senha = senha;
-        this.ativo = ativo;
+        this.ativo = true;
         this.tipoUsuario = tipoUsuario;
     }
 

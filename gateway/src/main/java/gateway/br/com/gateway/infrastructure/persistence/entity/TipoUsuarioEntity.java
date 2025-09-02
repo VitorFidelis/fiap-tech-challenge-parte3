@@ -28,7 +28,7 @@ public class TipoUsuarioEntity {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.ativo = ativo;
+        this.ativo = true;
     }
 
     public Long getId() {
