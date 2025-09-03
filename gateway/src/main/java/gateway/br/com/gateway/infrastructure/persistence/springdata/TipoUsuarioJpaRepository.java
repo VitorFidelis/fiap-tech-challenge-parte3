@@ -1,4 +1,8 @@
 package gateway.br.com.gateway.infrastructure.persistence.springdata;
 
-public interface TipoUsuarioJpaRepository {
+import gateway.br.com.gateway.infrastructure.persistence.entity.TipoUsuarioEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TipoUsuarioJpaRepository extends JpaRepository<TipoUsuarioEntity, Long> {
+
 }
