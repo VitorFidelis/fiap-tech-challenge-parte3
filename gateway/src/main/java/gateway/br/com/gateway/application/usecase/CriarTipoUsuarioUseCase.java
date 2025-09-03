@@ -14,14 +14,14 @@ public class CriarTipoUsuarioUseCase {
     public TipoUsuario execute(CreateTipoUsuarioDto createTipoUsuarioDto) {
         TipoUsuario tipoUsuario = new TipoUsuario();
 
-        validaNomeTipousuario(createTipoUsuarioDto);
+        validaNomeTipoUsuario(createTipoUsuarioDto);
         tipoUsuario.setDescricao(createTipoUsuarioDto.descricao());
         tipoUsuario.setAtivo(createTipoUsuarioDto.ativo());
 
         return this.tipoUsuarioRepository.save(tipoUsuario);
     }
 
-    private void validaNomeTipousuario(CreateTipoUsuarioDto createTipoUsuarioDto) {
+    private void validaNomeTipoUsuario(CreateTipoUsuarioDto createTipoUsuarioDto) {
         TipoUsuario tipoUsuario = new TipoUsuario();
         var nomeString = createTipoUsuarioDto.nome();
         if (nomeString.name() == "ADMIN" ||
