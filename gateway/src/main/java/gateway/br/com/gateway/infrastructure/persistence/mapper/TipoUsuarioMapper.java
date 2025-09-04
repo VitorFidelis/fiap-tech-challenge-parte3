@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TipoUsuarioMapper {
     TipoUsuarioEntity fromTipoUsuarioJpa(TipoUsuario tipoUsuario);
     TipoUsuario fromTipoUsuarioDomain(TipoUsuarioEntity tipoUsuarioEntity);
-    Page<TipoUsuario> fromTipoUsuarioDomainPage(List<TipoUsuarioEntity> tipoUsuarioEntityList);
+    List<TipoUsuario> fromTipoUsuarioDomainPage(List<TipoUsuarioEntity> tipoUsuarioEntityList);
 }
