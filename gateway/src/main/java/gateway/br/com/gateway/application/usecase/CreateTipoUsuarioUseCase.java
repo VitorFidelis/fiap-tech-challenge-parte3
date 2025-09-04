@@ -16,7 +16,6 @@ public class CriarTipoUsuarioUseCase {
 
         validaNomeTipoUsuario(createTipoUsuarioDto);
         tipoUsuario.setDescricao(createTipoUsuarioDto.descricao());
-        tipoUsuario.setAtivo(createTipoUsuarioDto.ativo());
 
         return this.tipoUsuarioRepository.save(tipoUsuario);
     }
