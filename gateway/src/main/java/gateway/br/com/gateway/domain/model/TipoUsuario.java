@@ -4,7 +4,7 @@ public class TipoUsuario {
     private Long id;
     private TipoUsuarioEnum nome;
     private String descricao;
-    private Boolean ativo;
+    private Boolean ativo = true;
 
     public TipoUsuario() {
 
@@ -14,7 +14,7 @@ public class TipoUsuario {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.ativo = ativo;
+        this.ativo = true;
     }
 
     public Long getId() {

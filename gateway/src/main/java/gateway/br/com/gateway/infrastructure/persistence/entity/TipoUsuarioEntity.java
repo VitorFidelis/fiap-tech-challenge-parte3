@@ -18,7 +18,7 @@ public class TipoUsuarioEntity {
     private String descricao;
 
     @Column(nullable = false)
-    private Boolean ativo;
+    private Boolean ativo = true;
 
     public TipoUsuarioEntity() {
 
