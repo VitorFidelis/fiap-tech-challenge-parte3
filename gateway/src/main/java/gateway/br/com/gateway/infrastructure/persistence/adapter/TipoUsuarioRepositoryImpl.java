@@ -5,8 +5,10 @@ import gateway.br.com.gateway.domain.repository.TipoUsuarioRepository;
 import gateway.br.com.gateway.infrastructure.persistence.mapper.TipoUsuarioMapper;
 import gateway.br.com.gateway.infrastructure.persistence.springdata.TipoUsuarioJpaRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class TipoUsuarioRepositoryImpl implements TipoUsuarioRepository {
     private final TipoUsuarioJpaRepository tipoUsuarioJpaRepository;
     private final TipoUsuarioMapper tipoUsuarioMapper;
@@ -36,18 +38,20 @@ public class TipoUsuarioRepositoryImpl implements TipoUsuarioRepository {
     }
 
     @Override
-    public Boolean dectivate(Long id) {
-        return this.tipoUsuarioJpaRepository.getReferenceById(id).getAtivo();
+    public TipoUsuario dectivate(Long id) {
+        var tipoUsuarioEntity = this.tipoUsuarioJpaRepository.getReferenceById(id);
+        return this.tipoUsuarioMapper.fromTipoUsuarioDomain(tipoUsuarioEntity);
     }
 
     @Override
-    public Boolean reactivate(Long id) {
-        return this.tipoUsuarioJpaRepository.getReferenceById(id).getAtivo();
+    public TipoUsuario reactivate(Long id) {
+        var tipoUsuarioEntity = this.tipoUsuarioJpaRepository.getReferenceById(id);
+        return this.tipoUsuarioMapper.fromTipoUsuarioDomain(tipoUsuarioEntity);
     }
 
     @Override
-    public Page<TipoUsuario> findAll() {
-        var tipoUsuarioEntityList = this.tipoUsuarioJpaRepository.findAll();
-        return this.tipoUsuarioMapper.fromTipoUsuarioDomainPage(tipoUsuarioEntityList);
+    public Page<TipoUsuario> findAll(Pageable pageable) {
+        var tipoUsuarioEntityPage = this.tipoUsuarioJpaRepository.findAll(pageable);
+        return this.tipoUsuarioMapper.fromTipoUsuarioDomainList(tipoUsuarioEntityPage);
     }
 }

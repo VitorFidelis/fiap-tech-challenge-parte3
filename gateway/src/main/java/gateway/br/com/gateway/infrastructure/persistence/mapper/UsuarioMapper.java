@@ -11,5 +11,5 @@ import java.util.List;
 public interface UsuarioMapper {
     UsuarioEntity fromEntityJpa(Usuario usuario);
     Usuario fromEntityDomain(UsuarioEntity usuarioEntity);
-    Page<Usuario> fromUsuarioPage(List<UsuarioEntity> usuarioEntityList);
+    List<Usuario> fromUsuarioPage(List<UsuarioEntity> usuarioEntityList);
 }

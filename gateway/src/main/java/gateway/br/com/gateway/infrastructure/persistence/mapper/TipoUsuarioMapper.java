@@ -5,11 +5,11 @@ import gateway.br.com.gateway.infrastructure.persistence.entity.TipoUsuarioEntit
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface TipoUsuarioMapper {
     TipoUsuarioEntity fromTipoUsuarioJpa(TipoUsuario tipoUsuario);
     TipoUsuario fromTipoUsuarioDomain(TipoUsuarioEntity tipoUsuarioEntity);
-    List<TipoUsuario> fromTipoUsuarioDomainPage(List<TipoUsuarioEntity> tipoUsuarioEntityList);
+    default Page<TipoUsuario> fromTipoUsuarioDomainList(Page<TipoUsuarioEntity> tipoUsuarioEntityList) {
+        return tipoUsuarioEntityList.map(this::fromTipoUsuarioDomain);
+    }
 }

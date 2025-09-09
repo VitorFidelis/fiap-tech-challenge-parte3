@@ -6,6 +6,7 @@ import gateway.br.com.gateway.infrastructure.persistence.mapper.UsuarioMapper;
 import gateway.br.com.gateway.infrastructure.persistence.springdata.UsuarioJpaRepository;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UsuarioRepositoryImpl implements UsuarioRepository {
@@ -49,7 +50,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     @Override
-    public Page<Usuario> findAll() {
+    public List<Usuario> findAll() {
         var usuarioEntityList = this.usuarioJpaRepository.findAll();
         return this.usuarioMapper.fromUsuarioPage(usuarioEntityList);
     }

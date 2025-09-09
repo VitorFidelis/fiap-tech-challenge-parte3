@@ -1,8 +1,8 @@
 package gateway.br.com.gateway.domain.repository;
 
 import gateway.br.com.gateway.domain.model.Usuario;
-import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UsuarioRepository {
@@ -11,5 +11,5 @@ public interface UsuarioRepository {
     Boolean deactivate(UUID uuid);
     Boolean reactivate(UUID uuid);
     Usuario findById(UUID uuid);
-    Page<Usuario> findAll();
+    List<Usuario> findAll();
 }
