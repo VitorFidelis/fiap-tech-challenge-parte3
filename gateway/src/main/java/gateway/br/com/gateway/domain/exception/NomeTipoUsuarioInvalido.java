@@ -1,7 +1,7 @@
 package gateway.br.com.gateway.domain.exception;
 
-public class NomeTipoUsuarioInvalidoException extends RuntimeException {
-    public NomeTipoUsuarioInvalidoException(String message) {
+public class NomeTipoUsuarioInvalido extends RuntimeException {
+    public NomeTipoUsuarioInvalido(String message) {
         super(message);
     }
 }
