@@ -1,7 +1,7 @@
-package gateway.br.com.gateway.infrastructure.persistence.mapper;
+package gateway.br.com.gateway.infrastructure.persistence.mapper.tipousuarios;
 
-import gateway.br.com.gateway.domain.model.TipoUsuario;
-import gateway.br.com.gateway.infrastructure.persistence.entity.TipoUsuarioEntity;
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
+import gateway.br.com.gateway.infrastructure.persistence.entity.tipousuarios.TipoUsuarioEntity;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 public interface TipoUsuarioMapper {
     TipoUsuarioEntity fromTipoUsuarioJpa(TipoUsuario tipoUsuario);
     TipoUsuario fromTipoUsuarioDomain(TipoUsuarioEntity tipoUsuarioEntity);
-    default Page<TipoUsuario> fromTipoUsuarioDomainList(Page<TipoUsuarioEntity> tipoUsuarioEntityList) {
+    default Page<TipoUsuario> fromTipoUsuarioDomainPage(Page<TipoUsuarioEntity> tipoUsuarioEntityList) {
         return tipoUsuarioEntityList.map(this::fromTipoUsuarioDomain);
     }
 }

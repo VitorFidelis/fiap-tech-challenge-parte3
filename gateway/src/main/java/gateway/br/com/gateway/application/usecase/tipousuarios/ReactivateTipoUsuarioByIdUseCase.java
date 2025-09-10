@@ -1,6 +1,6 @@
 package gateway.br.com.gateway.application.usecase;
 
-import gateway.br.com.gateway.infrastructure.persistence.adapter.TipoUsuarioRepositoryImpl;
+import gateway.br.com.gateway.infrastructure.persistence.adapter.tipousuarios.TipoUsuarioRepositoryImpl;
 import org.springframework.stereotype.Service;
 
 @Service

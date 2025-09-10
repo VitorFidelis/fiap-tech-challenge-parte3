@@ -1,6 +1,6 @@
 package gateway.br.com.gateway.infrastructure.persistence.springdata;
 
-import gateway.br.com.gateway.infrastructure.persistence.entity.UsuarioEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

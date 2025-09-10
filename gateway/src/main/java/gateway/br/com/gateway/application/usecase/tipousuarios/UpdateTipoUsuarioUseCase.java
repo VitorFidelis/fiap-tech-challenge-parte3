@@ -3,7 +3,7 @@ package gateway.br.com.gateway.application.usecase;
 import gateway.br.com.gateway.application.dto.UpdateTipoUsuarioDto;
 import gateway.br.com.gateway.domain.exception.IdTipoUsuarioInvalido;
 import gateway.br.com.gateway.domain.model.TipoUsuario;
-import gateway.br.com.gateway.infrastructure.persistence.adapter.TipoUsuarioRepositoryImpl;
+import gateway.br.com.gateway.infrastructure.persistence.adapter.tipousuarios.TipoUsuarioRepositoryImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
