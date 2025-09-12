@@ -57,8 +57,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     }
 
     @Override
-    public Page<Usuario> findAll(Pageable pageable) {
+    public Page<Usuario> findAll(final Pageable pageable) {
         var usuarioEntityPage =  this.usuarioJpaRepository.findAll(pageable);
         return this.usuarioInfraMapper.fromUsuarioPage(usuarioEntityPage);
+    }
+
+    @Override
+    public Usuario findByEmail(final String email) {
+        var usuarioEntity  = this.usuarioJpaRepository.findByEmail(email);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 }

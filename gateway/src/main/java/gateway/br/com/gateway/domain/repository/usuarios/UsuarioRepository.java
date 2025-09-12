@@ -13,4 +13,5 @@ public interface UsuarioRepository {
     Usuario reactivate(UUID uuid);
     Usuario findById(UUID uuid);
     Page<Usuario> findAll(Pageable pageable);
+    Usuario findByEmail(String email);
 }

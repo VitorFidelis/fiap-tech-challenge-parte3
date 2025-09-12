@@ -21,7 +21,7 @@ public class UsuarioEntity {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 255)
     private String senha;
 
     @Column(nullable = false)
