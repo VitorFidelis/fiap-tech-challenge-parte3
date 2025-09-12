@@ -1,15 +1,16 @@
-package gateway.br.com.gateway.domain.repository;
+package gateway.br.com.gateway.domain.repository.usuarios;
 
-import gateway.br.com.gateway.domain.model.Usuario;
+import gateway.br.com.gateway.domain.model.usuario.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface UsuarioRepository {
     Usuario save(Usuario usuario);
     Usuario update(Usuario usuario);
-    Boolean deactivate(UUID uuid);
-    Boolean reactivate(UUID uuid);
+    Usuario deactivate(UUID uuid);
+    Usuario reactivate(UUID uuid);
     Usuario findById(UUID uuid);
-    List<Usuario> findAll();
+    Page<Usuario> findAll(Pageable pageable);
 }

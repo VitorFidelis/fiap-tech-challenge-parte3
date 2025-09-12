@@ -1,9 +1,9 @@
-package gateway.br.com.gateway.infrastructure.persistence.adapter;
+package gateway.br.com.gateway.infrastructure.persistence.adapter.tipousuarios;
 
-import gateway.br.com.gateway.domain.model.TipoUsuario;
-import gateway.br.com.gateway.domain.repository.TipoUsuarioRepository;
-import gateway.br.com.gateway.infrastructure.persistence.mapper.TipoUsuarioMapper;
-import gateway.br.com.gateway.infrastructure.persistence.springdata.TipoUsuarioJpaRepository;
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
+import gateway.br.com.gateway.domain.repository.tipousuarios.TipoUsuarioRepository;
+import gateway.br.com.gateway.infrastructure.persistence.mapper.tipousuarios.TipoUsuarioInfraMapper;
+import gateway.br.com.gateway.infrastructure.persistence.springdata.tipousuarios.TipoUsuarioJpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -11,9 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class TipoUsuarioRepositoryImpl implements TipoUsuarioRepository {
     private final TipoUsuarioJpaRepository tipoUsuarioJpaRepository;
-    private final TipoUsuarioMapper tipoUsuarioMapper;
+    private final TipoUsuarioInfraMapper tipoUsuarioMapper;
 
-    public TipoUsuarioRepositoryImpl(TipoUsuarioJpaRepository tipoUsuarioJpaRepository, TipoUsuarioMapper tipoUsuarioMapper) {
+    public TipoUsuarioRepositoryImpl(
+            TipoUsuarioJpaRepository tipoUsuarioJpaRepository,
+            TipoUsuarioInfraMapper tipoUsuarioMapper
+    ) {
         this.tipoUsuarioJpaRepository = tipoUsuarioJpaRepository;
         this.tipoUsuarioMapper = tipoUsuarioMapper;
     }
@@ -52,6 +55,12 @@ public class TipoUsuarioRepositoryImpl implements TipoUsuarioRepository {
     @Override
     public Page<TipoUsuario> findAll(Pageable pageable) {
         var tipoUsuarioEntityPage = this.tipoUsuarioJpaRepository.findAll(pageable);
-        return this.tipoUsuarioMapper.fromTipoUsuarioDomainList(tipoUsuarioEntityPage);
+        return this.tipoUsuarioMapper.fromTipoUsuarioDomainPage(tipoUsuarioEntityPage);
+    }
+
+    @Override
+    public TipoUsuario findByNomeIgnoreCase(String nome) {
+        var tipoUsuarioEntity = this.tipoUsuarioJpaRepository.findByNomeIgnoreCase(nome);
+        return this.tipoUsuarioMapper.fromTipoUsuarioDomain(tipoUsuarioEntity);
     }
 }

@@ -1,57 +1,64 @@
-package gateway.br.com.gateway.infrastructure.persistence.adapter;
+package gateway.br.com.gateway.infrastructure.persistence.adapter.usuarios;
 
-import gateway.br.com.gateway.domain.model.Usuario;
-import gateway.br.com.gateway.domain.repository.UsuarioRepository;
-import gateway.br.com.gateway.infrastructure.persistence.mapper.UsuarioMapper;
-import gateway.br.com.gateway.infrastructure.persistence.springdata.UsuarioJpaRepository;
+import gateway.br.com.gateway.domain.model.usuario.Usuario;
+import gateway.br.com.gateway.domain.repository.usuarios.UsuarioRepository;
+import gateway.br.com.gateway.infrastructure.persistence.mapper.usuarios.UsuarioInfraMapper;
+import gateway.br.com.gateway.infrastructure.persistence.springdata.usuarios.UsuarioJpaRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
+@Component
 public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     private final UsuarioJpaRepository usuarioJpaRepository;
-    private final UsuarioMapper usuarioMapper;
+    private final UsuarioInfraMapper usuarioInfraMapper;
 
-    public UsuarioRepositoryImpl(final UsuarioJpaRepository usuarioJpaRepository, final UsuarioMapper usuarioMapper) {
+    public UsuarioRepositoryImpl(
+            final UsuarioJpaRepository usuarioJpaRepository,
+            final UsuarioInfraMapper usuarioInfraMapper
+    ) {
         this.usuarioJpaRepository = usuarioJpaRepository;
-        this.usuarioMapper = usuarioMapper;
+        this.usuarioInfraMapper = usuarioInfraMapper;
     }
 
     @Override
     public Usuario save(final Usuario usuario) {
-        var usuarioEntity = this.usuarioMapper.fromEntityJpa(usuario);
+        var usuarioEntity = this.usuarioInfraMapper.fromEntityJpa(usuario);
         this.usuarioJpaRepository.save(usuarioEntity);
-        return this.usuarioMapper.fromEntityDomain(usuarioEntity);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 
     @Override
     public Usuario update(final Usuario usuario) {
-        var usuarioEntity = this.usuarioMapper.fromEntityJpa(usuario);
+        var usuarioEntity = this.usuarioInfraMapper.fromEntityJpa(usuario);
         this.usuarioJpaRepository.save(usuarioEntity);
-        return this.usuarioMapper.fromEntityDomain(usuarioEntity);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 
     @Override
-    public Boolean deactivate(final UUID uuid) {
-        return this.usuarioJpaRepository.getReferenceById(uuid).getAtivo();
+    public Usuario deactivate(final UUID uuid) {
+        var usuarioEntity = this.usuarioJpaRepository.getReferenceById(uuid);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 
     @Override
-    public Boolean reactivate(final UUID uuid) {
-        return this.usuarioJpaRepository.getReferenceById(uuid).getAtivo();
+    public Usuario reactivate(final UUID uuid) {
+        var usuarioEntity = this.usuarioJpaRepository.getReferenceById(uuid);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 
     @Override
     public Usuario findById(final UUID uuid) {
         var usuarioEntity = this.usuarioJpaRepository.getReferenceById(uuid);
-        return this.usuarioMapper.fromEntityDomain(usuarioEntity);
+        return this.usuarioInfraMapper.fromEntityDomain(usuarioEntity);
     }
 
     @Override
-    public List<Usuario> findAll() {
-        var usuarioEntityList = this.usuarioJpaRepository.findAll();
-        return this.usuarioMapper.fromUsuarioPage(usuarioEntityList);
+    public Page<Usuario> findAll(Pageable pageable) {
+        var usuarioEntityPage =  this.usuarioJpaRepository.findAll(pageable);
+        return this.usuarioInfraMapper.fromUsuarioPage(usuarioEntityPage);
     }
 }

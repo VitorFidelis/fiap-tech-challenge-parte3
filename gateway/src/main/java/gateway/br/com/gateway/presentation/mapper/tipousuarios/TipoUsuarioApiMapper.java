@@ -1,11 +1,10 @@
-package gateway.br.com.gateway.presentation.mapper;
+package gateway.br.com.gateway.presentation.mapper.tipousuarios;
 
-import gateway.br.com.gateway.application.dto.CreateTipoUsuarioDto;
-import gateway.br.com.gateway.application.dto.UpdateTipoUsuarioDto;
-import gateway.br.com.gateway.domain.model.TipoUsuario;
-import gateway.br.com.gateway.domain.model.TipoUsuarioEnum;
-import gateway.br.com.gateway.presentation.api.TipoUsuarioRequest;
-import gateway.br.com.gateway.presentation.api.TipoUsuarioResponseDetalhado;
+import gateway.br.com.gateway.application.dto.tipousuarios.CreateTipoUsuarioDto;
+import gateway.br.com.gateway.application.dto.tipousuarios.UpdateTipoUsuarioDto;
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
+import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioRequest;
+import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioResponseDetalhado;
 
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
@@ -18,13 +17,4 @@ public interface TipoUsuarioApiMapper {
     default Page<TipoUsuarioResponseDetalhado> fromDtoPagePresetation(Page<TipoUsuario> tipoUsuarioPage) {
         return tipoUsuarioPage.map(this::fromDtoPresentation);
     }
-    // Métodos auxiliares de conversão usados pelo MapStruct
-    default TipoUsuarioEnum map(String value) {
-        return TipoUsuarioEnum.fromString(value);
-    }
-    default String map(TipoUsuarioEnum value) {
-        return value != null ? value.toValue() : null;
-    }
-
-
 }

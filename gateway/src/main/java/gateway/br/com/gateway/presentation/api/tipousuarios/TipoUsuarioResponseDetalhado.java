@@ -1,10 +1,8 @@
-package gateway.br.com.gateway.presentation.api;
-
-import gateway.br.com.gateway.domain.model.TipoUsuarioEnum;
+package gateway.br.com.gateway.presentation.api.tipousuarios;
 
 public record TipoUsuarioResponseDetalhado(
         Long id,
-        TipoUsuarioEnum nome,
+        String nome,
         String descricao,
         Boolean ativo
 ) {

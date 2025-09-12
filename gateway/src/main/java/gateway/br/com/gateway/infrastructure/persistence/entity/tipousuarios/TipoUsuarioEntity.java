@@ -1,6 +1,5 @@
-package gateway.br.com.gateway.infrastructure.persistence.entity;
+package gateway.br.com.gateway.infrastructure.persistence.entity.tipousuarios;
 
-import gateway.br.com.gateway.domain.model.TipoUsuarioEnum;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,9 +9,8 @@ public class TipoUsuarioEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoUsuarioEnum nome;
+    @Column(nullable = false, unique = true)
+    private String nome;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String descricao;
@@ -24,7 +22,7 @@ public class TipoUsuarioEntity {
 
     }
 
-    public TipoUsuarioEntity(Long id, TipoUsuarioEnum nome, String descricao, Boolean ativo) {
+    public TipoUsuarioEntity(Long id, String nome, String descricao, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -39,11 +37,11 @@ public class TipoUsuarioEntity {
         this.id = id;
     }
 
-    public TipoUsuarioEnum getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(final TipoUsuarioEnum nome) {
+    public void setNome(final String nome) {
         this.nome = nome;
     }
 

@@ -1,6 +1,6 @@
-package gateway.br.com.gateway.application.usecase;
+package gateway.br.com.gateway.application.usecase.tipousuarios;
 
-import gateway.br.com.gateway.domain.model.TipoUsuario;
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
 import gateway.br.com.gateway.infrastructure.persistence.adapter.tipousuarios.TipoUsuarioRepositoryImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

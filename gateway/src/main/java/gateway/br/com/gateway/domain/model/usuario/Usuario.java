@@ -1,4 +1,6 @@
-package gateway.br.com.gateway.domain.model;
+package gateway.br.com.gateway.domain.model.usuario;
+
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
 
 import java.util.UUID;
 
@@ -8,7 +10,7 @@ public class Usuario {
     private String sobrenome;
     private String email;
     private String senha;
-    private Boolean ativo;
+    private Boolean ativo = true;
     private TipoUsuario tipoUsuario;
 
     public Usuario() {
@@ -21,7 +23,7 @@ public class Usuario {
         this.sobrenome = sobrenome;
         this.email = email;
         this.senha = senha;
-        this.ativo = ativo;
+        this.ativo = true;
         this.tipoUsuario = tipoUsuario;
     }
 

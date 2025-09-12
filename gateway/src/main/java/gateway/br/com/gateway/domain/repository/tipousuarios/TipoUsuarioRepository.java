@@ -1,6 +1,6 @@
-package gateway.br.com.gateway.domain.repository;
+package gateway.br.com.gateway.domain.repository.tipousuarios;
 
-import gateway.br.com.gateway.domain.model.TipoUsuario;
+import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,4 +11,5 @@ public interface TipoUsuarioRepository {
     TipoUsuario dectivate(Long id);
     TipoUsuario reactivate(Long id);
     Page<TipoUsuario> findAll(Pageable pageable);
+    TipoUsuario findByNomeIgnoreCase(String nome);
 }

@@ -1,9 +1,9 @@
-package gateway.br.com.gateway.presentation.controller;
+package gateway.br.com.gateway.presentation.controller.tipousuarios;
 
-import gateway.br.com.gateway.application.usecase.*;
-import gateway.br.com.gateway.presentation.api.TipoUsuarioRequest;
-import gateway.br.com.gateway.presentation.api.TipoUsuarioResponseDetalhado;
-import gateway.br.com.gateway.presentation.mapper.TipoUsuarioApiMapper;
+import gateway.br.com.gateway.application.usecase.tipousuarios.*;
+import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioRequest;
+import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioResponseDetalhado;
+import gateway.br.com.gateway.presentation.mapper.tipousuarios.TipoUsuarioApiMapper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -96,16 +96,18 @@ public class TipoUsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteTipoUsuarioId(
+    public ResponseEntity<Void> deleteTipoUsuarioId(
             @PathVariable("id") final Long id
     ) {
-        return ResponseEntity.ok(this.deactivateTipoUsuarioByIdUseCase.deactivate(id));
+        this.deactivateTipoUsuarioByIdUseCase.deactivate(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("reactivate/{id}")
-    public ResponseEntity<Boolean> reactivateTipoUsuarioId(
+    public ResponseEntity<Void> reactivateTipoUsuarioId(
             @PathVariable("id") final Long id
     ) {
-        return ResponseEntity.ok(this.reactivateTipoUsuarioByIdUseCase.execute(id));
+        this.reactivateTipoUsuarioByIdUseCase.execute(id);
+        return ResponseEntity.noContent().build();
     }
 }

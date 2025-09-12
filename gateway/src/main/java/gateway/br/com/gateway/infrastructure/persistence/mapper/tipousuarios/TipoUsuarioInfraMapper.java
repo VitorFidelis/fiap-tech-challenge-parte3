@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
-public interface TipoUsuarioMapper {
+public interface TipoUsuarioInfraMapper {
     TipoUsuarioEntity fromTipoUsuarioJpa(TipoUsuario tipoUsuario);
     TipoUsuario fromTipoUsuarioDomain(TipoUsuarioEntity tipoUsuarioEntity);
     default Page<TipoUsuario> fromTipoUsuarioDomainPage(Page<TipoUsuarioEntity> tipoUsuarioEntityList) {

@@ -1,8 +1,8 @@
-package gateway.br.com.gateway.domain.model;
+package gateway.br.com.gateway.domain.model.tipousuarios;
 
 public class TipoUsuario {
     private Long id;
-    private TipoUsuarioEnum nome;
+    private String nome;
     private String descricao;
     private Boolean ativo = true;
 
@@ -10,7 +10,7 @@ public class TipoUsuario {
 
     }
 
-    public TipoUsuario(Long id, TipoUsuarioEnum nome, String descricao, Boolean ativo) {
+    public TipoUsuario(Long id, String nome, String descricao, Boolean ativo) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -25,11 +25,11 @@ public class TipoUsuario {
         this.id = id;
     }
 
-    public TipoUsuarioEnum getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(TipoUsuarioEnum nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 

@@ -1,4 +1,4 @@
-package gateway.br.com.gateway.application.usecase;
+package gateway.br.com.gateway.application.usecase.tipousuarios;
 
 import gateway.br.com.gateway.infrastructure.persistence.adapter.tipousuarios.TipoUsuarioRepositoryImpl;
 import org.springframework.stereotype.Service;
@@ -11,11 +11,11 @@ public class ReactivateTipoUsuarioByIdUseCase {
         this.tipoUsuarioRepositoryImpl = tipoUsuarioRepositoryImpl;
     }
 
-    public Boolean execute(Long id) {
+    public void execute(Long id) {
         var tipoUsuario  = this.tipoUsuarioRepositoryImpl.reactivate(id);
         if (tipoUsuario.getAtivo() == false) {
             tipoUsuario.setAtivo(true);
         }
-        return this.tipoUsuarioRepositoryImpl.save(tipoUsuario).getAtivo().booleanValue();
+        this.tipoUsuarioRepositoryImpl.save(tipoUsuario);
     }
 }

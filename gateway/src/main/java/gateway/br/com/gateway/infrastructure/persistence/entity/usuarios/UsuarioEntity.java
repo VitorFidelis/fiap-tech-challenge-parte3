@@ -1,5 +1,6 @@
-package gateway.br.com.gateway.infrastructure.persistence.entity;
+package gateway.br.com.gateway.infrastructure.persistence.entity.usuarios;
 
+import gateway.br.com.gateway.infrastructure.persistence.entity.tipousuarios.TipoUsuarioEntity;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -24,9 +25,9 @@ public class UsuarioEntity {
     private String senha;
 
     @Column(nullable = false)
-    private Boolean ativo;
+    private Boolean ativo = true;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "tipousuario_id", referencedColumnName = "id", nullable = false)
     private TipoUsuarioEntity tipoUsuario;
 
@@ -34,7 +35,15 @@ public class UsuarioEntity {
 
     }
 
-    public UsuarioEntity(UUID id, String nome, String sobrenome, String email, String senha, Boolean ativo, TipoUsuarioEntity tipoUsuario) {
+    public UsuarioEntity(
+            UUID id,
+            String nome,
+            String sobrenome,
+            String email,
+            String senha,
+            Boolean ativo,
+            TipoUsuarioEntity tipoUsuario
+    ) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
