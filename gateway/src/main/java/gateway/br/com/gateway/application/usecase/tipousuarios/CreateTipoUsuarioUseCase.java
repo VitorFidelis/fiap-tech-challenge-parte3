@@ -15,7 +15,7 @@ public class CreateTipoUsuarioUseCase {
 
     public TipoUsuario execute(CreateTipoUsuarioDto createTipoUsuarioDto) {
         TipoUsuario tipoUsuario = new TipoUsuario();
-        tipoUsuario.setNome(createTipoUsuarioDto.nome());
+        tipoUsuario.setNome(createTipoUsuarioDto.nome().toUpperCase());
         tipoUsuario.setDescricao(createTipoUsuarioDto.descricao());
         return this.tipoUsuarioRepository.save(tipoUsuario);
     }

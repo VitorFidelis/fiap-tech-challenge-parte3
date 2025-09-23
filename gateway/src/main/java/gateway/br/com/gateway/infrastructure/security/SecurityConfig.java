@@ -1,7 +1,7 @@
 package gateway.br.com.gateway.infrastructure.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -11,14 +11,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(final CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(
+            final CustomUserDetailsService userDetailsService,
+            final JwtAuthenticationFilter jwtAuthenticationFilter
+    ) {
         this.userDetailsService = userDetailsService;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     /*
@@ -36,15 +42,39 @@ public class SecurityConfig {
                 * Nesse cenário, o próprio token é uma proteção contra esses tipos de ataques e ficaria repetitivo.
                  * */
                 .csrf(csrf -> csrf.disable())
-                /*
+                /**-
                 * sessionManagement()
                 * mostrar o gerenciamento da sessão
                 * sessionCreationPolicy()
                 * política de criação da sessão
                 * */
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS
-                )).build();// criar o objeto SecurityFilterChain
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(req -> {
+                    req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/tipousuarios").hasRole("SUPERADMIN");
+                    req.requestMatchers(HttpMethod.POST, "/usuarios").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.requestMatchers(HttpMethod.PUT, "/tipousuarios/").hasRole("SUPERADMIN");
+                    req.requestMatchers(HttpMethod.PUT,"/usuarios/").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.requestMatchers(HttpMethod.DELETE,"/tipousuarios/").hasAnyRole("SUPERADMIN");
+                    req.requestMatchers(HttpMethod.DELETE, "/usuarios/").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.requestMatchers(HttpMethod.PATCH,"/tipousuarios/").hasRole("SUPERADMIN");
+                    req.requestMatchers(HttpMethod.PATCH,"/usuarios/").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.requestMatchers(HttpMethod.GET,"/tipousuarios/").hasAnyRole("SUPERADMIN","ADMIN");
+                    req.requestMatchers(HttpMethod.GET,"/tipousuarios").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.requestMatchers(HttpMethod.GET,"/usuarios/").hasAnyRole("SUPERADMIN","ADMIN");
+                    req.requestMatchers(HttpMethod.GET,"/usuarios").hasAnyRole("SUPERADMIN","ADMIN");
+
+                    req.anyRequest().authenticated();
+                })
+                // mudando a ordem dos filtro, colocando em primeiro lugar o meu filtro customizado depois do Spring
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();// criar o objeto SecurityFilterChain
     }
 
     /*

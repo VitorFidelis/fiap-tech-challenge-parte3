@@ -30,7 +30,7 @@ public class CreateUsuarioUseCase {
         usuario.setEmail(createUsuarioDto.email());
         usuario.setSenha(this.passwordEncoder.encode(createUsuarioDto.senha()));
         var tipoUsuario = this.tipoUsuarioRepositoryImpl.findByNomeIgnoreCase(
-                createUsuarioDto.tipo()
+                createUsuarioDto.tipo().toUpperCase()
         );
         usuario.setTipoUsuario(tipoUsuario);
         return this.usuarioRepositoryImpl.save(usuario);

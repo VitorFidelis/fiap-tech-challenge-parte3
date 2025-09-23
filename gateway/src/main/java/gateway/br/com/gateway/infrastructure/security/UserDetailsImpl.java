@@ -17,6 +17,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Retorna a role com prefixo ROLE_ para o Spring Security
         return List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getTipoUsuario().getNome()));
     }
 
@@ -32,22 +33,22 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 
     public Usuario getUsuario() {

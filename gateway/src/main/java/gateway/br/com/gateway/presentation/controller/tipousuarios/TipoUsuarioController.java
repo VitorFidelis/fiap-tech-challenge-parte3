@@ -22,7 +22,7 @@ public class TipoUsuarioController {
     private final TipoUsuarioApiMapper tipoUsuarioApiMapper;
     private final FindTipoUsuarioByIdUseCase findTipoUsuarioByIdUseCase;
     private final UpdateTipoUsuarioUseCase updateTipoUsuarioUseCase;
-    private final FIndTipoUsuarioAllUseCase fIndTipoUsuarioAllUseCase;
+    private final FindTipoUsuarioAllUseCase fIndTipoUsuarioAllUseCase;
     private final DeactivateTipoUsuarioByIdUseCase deactivateTipoUsuarioByIdUseCase;
     private final ReactivateTipoUsuarioByIdUseCase reactivateTipoUsuarioByIdUseCase;
 
@@ -31,7 +31,7 @@ public class TipoUsuarioController {
             final TipoUsuarioApiMapper tipoUsuarioApiMapper,
             final FindTipoUsuarioByIdUseCase findTipoUsuarioByIdUseCase,
             final UpdateTipoUsuarioUseCase updateTipoUsuarioUseCase,
-            final FIndTipoUsuarioAllUseCase fIndTipoUsuarioAllUseCase,
+            final FindTipoUsuarioAllUseCase fIndTipoUsuarioAllUseCase,
             final DeactivateTipoUsuarioByIdUseCase deactivateTipoUsuarioByIdUseCase,
             final ReactivateTipoUsuarioByIdUseCase reactivateTipoUsuarioByIdUseCase
     ) {
@@ -85,7 +85,7 @@ public class TipoUsuarioController {
             @PageableDefault(
                     page = 0,
                     size = 5,
-                    sort = "id",
+                    sort = "nome",
                     direction = Sort.Direction.ASC
             ) final Pageable pageable
     ) {

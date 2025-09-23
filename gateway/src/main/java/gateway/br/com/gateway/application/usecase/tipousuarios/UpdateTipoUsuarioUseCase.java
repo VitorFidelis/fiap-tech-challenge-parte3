@@ -18,7 +18,7 @@ public class UpdateTipoUsuarioUseCase {
     public TipoUsuario execute(Long id, UpdateTipoUsuarioDto updateTipoUsuarioDto) {
         try{
             var tipoUsuario = this.tipoUsuarioRepositoryImpl.findById(id);
-            tipoUsuario.setNome(updateTipoUsuarioDto.nome());
+            tipoUsuario.setNome(updateTipoUsuarioDto.nome().toUpperCase());
             tipoUsuario.setDescricao(updateTipoUsuarioDto.descricao());
             return this.tipoUsuarioRepositoryImpl.save(tipoUsuario);
         }catch (EntityNotFoundException ex){

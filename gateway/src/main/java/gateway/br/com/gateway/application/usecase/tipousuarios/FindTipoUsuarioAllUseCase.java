@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FIndTipoUsuarioAllUseCase {
+public class FindTipoUsuarioAllUseCase {
     private final TipoUsuarioRepositoryImpl tipoUsuarioRepositoryImpl;
 
-    public FIndTipoUsuarioAllUseCase(final TipoUsuarioRepositoryImpl tipoUsuarioRepositoryImpl) {
+    public FindTipoUsuarioAllUseCase(final TipoUsuarioRepositoryImpl tipoUsuarioRepositoryImpl) {
         this.tipoUsuarioRepositoryImpl = tipoUsuarioRepositoryImpl;
     }
 

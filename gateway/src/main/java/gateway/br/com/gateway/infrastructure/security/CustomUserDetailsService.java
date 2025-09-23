@@ -19,6 +19,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             final String email
     ) throws UsernameNotFoundException {
         var usuario = this.usuarioRepositoryImpl.findByEmail(email);
+        if (usuario == null) {
+            throw new RuntimeException("Usuário não encontrado com email: " + email);
+        }
         return new UserDetailsImpl(usuario);
     }
 }
