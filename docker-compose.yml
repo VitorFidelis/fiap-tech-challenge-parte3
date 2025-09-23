@@ -53,6 +53,24 @@ services:
       timeout: 5s
       retries: 5
 
+  # Banco para service-gateway
+  db-gateway:
+    image: postgres:16
+    container_name: db-gateway
+    environment:
+      POSTGRES_DB: gateway_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_GATEWAY_PORT:-5436}:5432"
+    volumes:
+      - db_gateway_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d gateway_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # RabbitMQ (com painel web)
   rabbitmq:
     image: rabbitmq:3-management
@@ -73,3 +91,4 @@ volumes:
   db_agendamento_data:
   db_notificacao_data:
   db_historico_data:
+  db_gateway_data:
