@@ -17,6 +17,7 @@ services:
       timeout: 5s
       retries: 5
 
+  #################################################################################
   # Banco para notificacao-service
   db-notificacao:
     image: postgres:16
@@ -35,6 +36,7 @@ services:
       timeout: 5s
       retries: 5
 
+  #################################################################################
   # Banco para historico-service
   db-historico:
     image: postgres:16
@@ -53,6 +55,9 @@ services:
       timeout: 5s
       retries: 5
 
+
+
+  #################################################################################
   # Banco para service-gateway
   db-gateway:
     image: postgres:16
@@ -71,9 +76,28 @@ services:
       timeout: 5s
       retries: 5
 
+  # Serviço Spring Boot (exemplo: gateway)
+  gateway-service:
+    build: ./gateway
+    container_name: gateway-service
+    ports:
+      - "8080:8080"   # mapeia porta do host para a porta do container
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: gateway_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-gateway:5432/gateway_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      db-gateway:
+        condition: service_healthy
+#################################################################################
+
   # RabbitMQ (com painel web)
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4-management
     container_name: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}

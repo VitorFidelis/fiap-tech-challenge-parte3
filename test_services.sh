@@ -7,7 +7,7 @@ source .env
 echo "🔎 Testando containers..."
 
 # Lista containers que interessam
-docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "db-agendamento|db-notificacao|db-historico|rabbitmq"
+docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "db-agendamento|db-notificacao|db-historico|db-gateway|rabbitmq"
 
 # Função para testar Postgres
 test_postgres() {
@@ -22,6 +22,7 @@ test_postgres() {
 test_postgres db-agendamento agendamento_db
 test_postgres db-notificacao notificacao_db
 test_postgres db-historico historico_db
+test_postgres db-gateway gateway_db
 
 # Testa RabbitMQ via API de health
 echo "⏳ Testando RabbitMQ..."

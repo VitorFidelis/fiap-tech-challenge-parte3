@@ -9,7 +9,8 @@ import java.util.UUID;
 @Table(name = "usuarios")
 public class UsuarioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column(columnDefinition = "UUID", updatable = false, nullable = false)
     private UUID id;
 
     @Column(nullable = false, length = 100)

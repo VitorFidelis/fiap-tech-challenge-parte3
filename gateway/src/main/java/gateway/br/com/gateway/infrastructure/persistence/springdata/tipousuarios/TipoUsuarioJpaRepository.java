@@ -2,7 +2,10 @@ package gateway.br.com.gateway.infrastructure.persistence.springdata.tipousuario
 
 import gateway.br.com.gateway.infrastructure.persistence.entity.tipousuarios.TipoUsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
 
+@EnableJpaRepositories
 public interface TipoUsuarioJpaRepository extends JpaRepository<TipoUsuarioEntity, Long> {
     TipoUsuarioEntity findByNomeIgnoreCase(String nome);
 }
