@@ -5,6 +5,7 @@ import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioRequest;
 import gateway.br.com.gateway.presentation.api.tipousuarios.TipoUsuarioResponseDetalhado;
 import gateway.br.com.gateway.presentation.mapper.tipousuarios.TipoUsuarioApiMapper;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/tipousuarios")
+@SecurityRequirement(name = "bearer-key")
 public class TipoUsuarioController {
     private final CreateTipoUsuarioUseCase createTipoUsuarioUseCase;
     private final TipoUsuarioApiMapper tipoUsuarioApiMapper;

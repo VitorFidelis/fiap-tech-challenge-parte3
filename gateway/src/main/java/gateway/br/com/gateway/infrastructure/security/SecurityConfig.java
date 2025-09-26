@@ -51,6 +51,8 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
+                    req.requestMatchers("/swagger-ui.html","/v3/api-docs/**","/swagger-ui/**").permitAll();
+
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/tipousuarios").hasRole("SUPERADMIN");
                     req.requestMatchers(HttpMethod.POST, "/usuarios").hasAnyRole("SUPERADMIN","ADMIN");
