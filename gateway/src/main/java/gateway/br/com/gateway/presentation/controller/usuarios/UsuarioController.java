@@ -5,6 +5,7 @@ import gateway.br.com.gateway.presentation.api.usuarios.UsuarioRequest;
 import gateway.br.com.gateway.presentation.api.usuarios.UsuarioResponseDetalhado;
 import gateway.br.com.gateway.presentation.mapper.usuarios.UsuarioApiMapper;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/usuarios")
+@SecurityRequirement(name = "bearer-key")
 public class UsuarioController {
     private final CreateUsuarioUseCase createUsuarioUseCase;
     private final FindUsuarioByIdUseCase findUsuarioByIdUseCase;
