@@ -1,0 +1,25 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/notificacoes
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.format_sql: true
+    open-in-view: false
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+notificacoes:
+  queue: consultas.eventos
+  backoff:
+    delays: [300, 900, 3600]
+  retry:
+    maxAttempts: 5
