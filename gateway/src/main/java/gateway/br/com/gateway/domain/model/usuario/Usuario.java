@@ -1,17 +1,18 @@
 package gateway.br.com.gateway.domain.model.usuario;
 
+import gateway.br.com.gateway.domain.common.BaseEntity;
 import gateway.br.com.gateway.domain.model.tipousuarios.TipoUsuario;
 
 import java.util.UUID;
 
-public class Usuario {
-    private UUID id;
-    private String nome;
-    private String sobrenome;
-    private String email;
-    private String senha;
-    private Boolean ativo = true;
-    private TipoUsuario tipoUsuario;
+public class Usuario extends BaseEntity {
+    protected UUID id;
+    protected String nome;
+    protected String sobrenome;
+    protected String email;
+    protected String senha;
+    protected Boolean ativo = true;
+    protected TipoUsuario tipoUsuario;
 
     public Usuario() {
 
@@ -25,6 +26,13 @@ public class Usuario {
         this.senha = senha;
         this.ativo = true;
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public Usuario(String nome, String email, String senha) {
+        super();
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
     }
 
     public UUID getId() {
@@ -81,5 +89,12 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public void reativar() {
+        if (!this.ativo) {
+            this.ativo = true;
+            touch();
+        }
     }
 }

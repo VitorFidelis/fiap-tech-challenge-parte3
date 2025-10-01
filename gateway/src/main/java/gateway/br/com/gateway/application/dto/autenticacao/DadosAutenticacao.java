@@ -1,4 +1,4 @@
-package gateway.br.com.gateway.application.dto;
+package gateway.br.com.gateway.application.dto.autenticacao;
 
 public record DadosAutenticacao(
         String email,

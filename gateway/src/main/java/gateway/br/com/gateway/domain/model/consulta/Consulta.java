@@ -1,0 +1,133 @@
+package gateway.br.com.gateway.domain.model.consulta;
+
+import gateway.br.com.gateway.domain.common.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
+
+@Setter
+@Getter
+public class Consulta extends BaseEntity {
+
+    private final UUID medicoId;
+    private final UUID enfermeiroId;
+    private final UUID pacienteId;
+    private LocalDateTime horarioSolicitado;
+    private StatusConsulta status;
+    private String observacoes;
+
+
+    private Consulta(
+            UUID id,
+            UUID medicoId,
+            UUID enfermeiroId,
+            UUID pacienteId,
+            LocalDateTime horarioSolicitado,
+            String observacoes,
+            StatusConsulta status) {
+
+        super();
+        this.id = id;
+        this.medicoId = Objects.requireNonNull(medicoId);
+        this.enfermeiroId = Objects.requireNonNull(enfermeiroId);
+        this.pacienteId = Objects.requireNonNull(pacienteId);
+        this.horarioSolicitado = Objects.requireNonNull(horarioSolicitado);
+        this.observacoes = observacoes;
+        this.status = Objects.requireNonNull(status);
+    }
+
+    private Consulta(
+            UUID medicoId,
+            UUID enfermeiroId,
+            UUID pacienteId,
+            LocalDateTime horarioSolicitado,
+            String observacoes,
+            StatusConsulta status) {
+
+        super();
+
+        this.medicoId = Objects.requireNonNull(medicoId);
+        this.enfermeiroId = Objects.requireNonNull(enfermeiroId);
+        this.pacienteId = Objects.requireNonNull(pacienteId);
+        this.horarioSolicitado = Objects.requireNonNull(horarioSolicitado);
+        this.observacoes = observacoes;
+        this.status = Objects.requireNonNull(status);
+    }
+
+    public static Consulta agendar(UUID medicoId,
+                                   UUID enfermeiroId,
+                                   UUID pacienteId,
+                                   LocalDateTime horarioSolicitado,
+                                   String observacoes) {
+        return new Consulta(
+                medicoId,
+                enfermeiroId,
+                pacienteId,
+                horarioSolicitado,
+                observacoes,
+                StatusConsulta.AGENDADA
+        );
+    }
+
+    //reconstituir do banco
+    public static Consulta reconstituir(
+            UUID id,
+            UUID medicoId,
+            UUID enfermeiroId,
+            UUID pacienteId,
+            LocalDateTime horarioSolicitado,
+            String observacoes,
+            StatusConsulta status) {
+        return new Consulta(
+                id,
+                medicoId,
+                enfermeiroId,
+                pacienteId,
+                horarioSolicitado,
+                observacoes,
+                status
+        );
+    }
+
+
+    public void atualizarObservacoes(String novasObservacoes) {
+        this.observacoes = novasObservacoes;
+        touch();
+    }
+
+    public Consulta cancelar(String motivoCancelamento) {
+        if (this.status == StatusConsulta.AGENDADA) {
+            this.status = StatusConsulta.CANCELADA;
+            this.setObservacoes("Consulta cancelada: " + motivoCancelamento);
+            this.desativar();
+            this.touch();
+        }
+        return this;
+    }
+
+    public void concluir() {
+        if (this.horarioSolicitado.isAfter(LocalDateTime.now())) {
+            this.status = StatusConsulta.REALIZADA;
+            touch();
+        }
+    }
+
+    public Consulta atualizar(Consulta consulta) {
+        this.horarioSolicitado = consulta.getHorarioSolicitado();
+        this.observacoes = consulta.getObservacoes();
+        this.status = consulta.getStatus();
+        return new Consulta(
+                this.id,
+                this.medicoId,
+                this.enfermeiroId,
+                this.pacienteId,
+                this.horarioSolicitado,
+                this.observacoes,
+                this.status
+        );
+    }
+}
+
