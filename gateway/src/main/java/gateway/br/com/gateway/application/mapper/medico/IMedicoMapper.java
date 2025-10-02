@@ -5,7 +5,7 @@ import gateway.br.com.gateway.application.dto.medico.AtualizaMedicoDTO;
 import gateway.br.com.gateway.application.dto.medico.CadastraMedicoDTO;
 import gateway.br.com.gateway.application.dto.medico.MedicoResponseDTO;
 import gateway.br.com.gateway.domain.model.usuario.Medico;
-import gateway.br.com.gateway.infrastructure.datasource.jpa.medico.JpaMedicoEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaMedicoEntity;
 
 import java.util.List;
 

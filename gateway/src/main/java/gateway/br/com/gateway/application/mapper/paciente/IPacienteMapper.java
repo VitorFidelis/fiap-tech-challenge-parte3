@@ -5,7 +5,7 @@ import gateway.br.com.gateway.application.dto.paciente.AtualizaPacienteDTO;
 import gateway.br.com.gateway.application.dto.paciente.CadastraPacienteDTO;
 import gateway.br.com.gateway.application.dto.paciente.PacienteResponseDTO;
 import gateway.br.com.gateway.domain.model.usuario.Paciente;
-import gateway.br.com.gateway.infrastructure.datasource.jpa.paciente.JpaPacienteEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaPacienteEntity;
 
 import java.util.List;
 

@@ -6,6 +6,7 @@ import gateway.br.com.gateway.application.mapper.medico.IMedicoMapper;
 import gateway.br.com.gateway.application.output.usuario.medico.MedicoDataSource;
 import gateway.br.com.gateway.domain.exception.UsuarioNaoEncontradoException;
 import gateway.br.com.gateway.domain.model.usuario.Medico;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaMedicoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

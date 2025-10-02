@@ -1,6 +1,7 @@
 package gateway.br.com.gateway.infrastructure.datasource.jpa.consulta;
 
 import gateway.br.com.gateway.domain.model.consulta.StatusConsulta;
+import gateway.br.com.gateway.infrastructure.persistence.entity.consulta.JpaConsultaEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

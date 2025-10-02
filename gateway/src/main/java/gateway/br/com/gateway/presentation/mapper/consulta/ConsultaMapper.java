@@ -8,7 +8,7 @@ import gateway.br.com.gateway.application.mapper.consulta.IConsultaMapper;
 import gateway.br.com.gateway.domain.model.consulta.Consulta;
 import gateway.br.com.gateway.domain.model.consulta.FiltroBuscaConsulta;
 import gateway.br.com.gateway.domain.model.valueobject.PeriodoConsultas;
-import gateway.br.com.gateway.infrastructure.datasource.jpa.consulta.JpaConsultaEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.consulta.JpaConsultaEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

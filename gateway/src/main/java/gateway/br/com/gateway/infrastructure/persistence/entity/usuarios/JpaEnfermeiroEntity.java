@@ -1,4 +1,4 @@
-package gateway.br.com.gateway.infrastructure.datasource.jpa.enfermeiro;
+package gateway.br.com.gateway.infrastructure.persistence.entity.usuarios;
 
 import gateway.br.com.gateway.domain.model.valueobject.Coren;
 import jakarta.persistence.*;

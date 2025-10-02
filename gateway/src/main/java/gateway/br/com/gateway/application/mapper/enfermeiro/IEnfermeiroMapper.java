@@ -4,7 +4,7 @@ import gateway.br.com.gateway.application.dto.enfermeiro.AtualizaEnfermeiroDTO;
 import gateway.br.com.gateway.application.dto.enfermeiro.CadastraEnfermeiroDTO;
 import gateway.br.com.gateway.application.dto.enfermeiro.EnfermeiroResponseDTO;
 import gateway.br.com.gateway.domain.model.usuario.Enfermeiro;
-import gateway.br.com.gateway.infrastructure.datasource.jpa.enfermeiro.JpaEnfermeiroEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaEnfermeiroEntity;
 
 import java.util.List;
 

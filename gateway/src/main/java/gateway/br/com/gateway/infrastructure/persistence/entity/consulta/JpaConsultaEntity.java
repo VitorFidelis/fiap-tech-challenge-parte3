@@ -1,4 +1,4 @@
-package gateway.br.com.gateway.infrastructure.datasource.jpa.consulta;
+package gateway.br.com.gateway.infrastructure.persistence.entity.consulta;
 
 import gateway.br.com.gateway.domain.model.consulta.StatusConsulta;
 import jakarta.persistence.*;

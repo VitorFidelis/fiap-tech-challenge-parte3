@@ -6,6 +6,7 @@ import gateway.br.com.gateway.application.mapper.enfermeiro.IEnfermeiroMapper;
 import gateway.br.com.gateway.application.output.usuario.enfermeiro.EnfermeiroDataSource;
 import gateway.br.com.gateway.domain.exception.UsuarioNaoEncontradoException;
 import gateway.br.com.gateway.domain.model.usuario.Enfermeiro;
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaEnfermeiroEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

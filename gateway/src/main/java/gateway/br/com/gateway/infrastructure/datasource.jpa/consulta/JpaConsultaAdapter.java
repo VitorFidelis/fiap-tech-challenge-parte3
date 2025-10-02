@@ -10,6 +10,7 @@ import gateway.br.com.gateway.domain.exception.ConsultaNaoEncontradaException;
 import gateway.br.com.gateway.domain.model.consulta.Consulta;
 import gateway.br.com.gateway.domain.model.consulta.FiltroBuscaConsulta;
 import gateway.br.com.gateway.domain.model.consulta.StatusConsulta;
+import gateway.br.com.gateway.infrastructure.persistence.entity.consulta.JpaConsultaEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

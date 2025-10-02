@@ -1,4 +1,4 @@
-package gateway.br.com.gateway.infrastructure.datasource.jpa.medico;
+package gateway.br.com.gateway.infrastructure.persistence.entity.usuarios;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

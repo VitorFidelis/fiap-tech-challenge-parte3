@@ -1,5 +1,6 @@
 package gateway.br.com.gateway.infrastructure.datasource.jpa.medico;
 
+import gateway.br.com.gateway.infrastructure.persistence.entity.usuarios.JpaMedicoEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -6,7 +6,7 @@ import gateway.br.com.gateway.application.dto.consulta.ConsultaFiltroRequestDTO;
 import gateway.br.com.gateway.application.dto.consulta.ConsultaResponseDTO;
 import gateway.br.com.gateway.domain.model.consulta.Consulta;
 import gateway.br.com.gateway.domain.model.consulta.FiltroBuscaConsulta;
-import gateway.br.com.gateway.infrastructure.datasource.jpa.consulta.JpaConsultaEntity;
+import gateway.br.com.gateway.infrastructure.persistence.entity.consulta.JpaConsultaEntity;
 
 import java.util.List;
 
