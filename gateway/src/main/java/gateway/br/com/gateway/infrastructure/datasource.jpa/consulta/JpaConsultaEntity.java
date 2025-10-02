@@ -29,7 +29,7 @@ public class JpaConsultaEntity {
     @Column(name = "medico_id", nullable = false)
     private UUID medicoId;
 
-    @Column(name = "enfermeiro_id")
+    @Column(name = "enfermeiro_id", nullable = false)
     private UUID enfermeiroId;
 
     @Column(name = "paciente_id", nullable = false)

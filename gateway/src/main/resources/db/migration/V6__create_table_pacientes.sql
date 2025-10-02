@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS pacientes (
+    id UUID PRIMARY KEY,
+    versao BIGINT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    ativo BOOLEAN NOT NULL,
+    criado_em TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    atualizado_em TIMESTAMP WITHOUT TIME ZONE
+);
