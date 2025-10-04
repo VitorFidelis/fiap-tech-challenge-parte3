@@ -2,20 +2,26 @@
 FROM maven:3.9.8-eclipse-temurin-21 AS build
 WORKDIR /app
 
-# Copiar pom.xml e baixar dependências antes de copiar o código todo (cache eficiente)
+# Copiar POM pai primeiro
 COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copiar POM do módulo agendamento
+COPY agendamento/pom.xml ./agendamento/
 
-# Copiar código-fonte e gerar o JAR
-COPY src ./src
-RUN mvn clean package -DskipTests
+# Baixar dependências
+RUN mvn dependency:go-offline -B
+
+# Copiar código-fonte do módulo agendamento
+COPY agendamento/src ./agendamento/src
+
+# Construir apenas o módulo agendamento
+RUN mvn clean package -pl agendamento -am -DskipTests
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Copiar o JAR gerado do stage anterior
-COPY --from=build /app/target/gateway-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/agendamento/target/agendamento-*.jar app.jar
 
 # Expõe a porta padrão do Spring Boot
 EXPOSE 8080

@@ -37,12 +37,14 @@ services:
       timeout: 5s
       retries: 5
 
-  # Serviço principal de agendamento
+  #Serviço de agendamento de consultas
   agendamento-service:
-    build: ./agendamento  # ou o caminho correto para seu Dockerfile
+    build:
+      context: .
+      dockerfile: agendamento/Dockerfile
     container_name: agendamento-service
     ports:
-      - "8080:8080"   # porta principal do serviço de agendamento
+      - "8080:8080"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

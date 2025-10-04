@@ -62,8 +62,7 @@ primeiro instale todas as dependencias necessarias:
 
 identifique o arquivo ***.env.example*** e faça uma copia renomeando para ***.env***.
 
-Preencha esse arquivo **.env** criado, com as credenciais que são utilizadas para acessar o PostgreSQL
-e RabbitMQ de sua maquina:
+Preencha esse arquivo **.env** criado, com as credenciais desejadas (aleatório).
 
 ```Text
 # Configuração PostgreSQL (todos os serviços usam)
@@ -78,12 +77,8 @@ Com essas informações preenchidas o docker-compose.yml consegue criar as bases
 
 ### Execute com Docker compose
 
-Baixe todos os microsserviços e no seu console favorito rodar:
-
-Se você tem docker e docker compose instalados, você pode executar apenas a execução:
-
 ````Shell
-  docker-compose.yml up
+  docker compose up
 ````
 
 Depois do comando a cima, podemos validar se os containers estão em execução:
@@ -105,7 +100,6 @@ Ao executar o comando a cima a saida esperada do teste é:
 🔎 Testando containers...
 db-agendamento    Up 30 seconds (healthy)
 db-notificacao    Up 30 seconds (healthy)
-db-historico      Up 30 seconds (healthy)
 rabbitmq          Up 30 seconds (healthy)
 
 ⏳ Testando conexão ao banco agendamento_db no container db-agendamento...
