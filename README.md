@@ -27,15 +27,11 @@ comunicação entre serviços.
 
 ### Serviço de agendamento:
 
-responsável pela criação e edição das consultas.
+responsável pela criação e edição das consultas; realizado em REST e GraphQL.
 
 ### Serviço de notificações:
 
 envia lembretes automáticos aos pacientes sobre consultas futuras.
-
-### Serviço de histórico:
-
-armazena o histórico de consultas e disponibiliza dados via GraphQL.
 
 ---
 
@@ -138,6 +134,13 @@ Após executar o seguinte comando:
 link para mais! [info-docker](guide/info-docker.md).
 
 ---
+
+## Como testar:
+Há uma coleção do postman na pasta Resource, para teste dos endpoints em REST. Para os endpoints em GraphQL, é preciso utilizar o link:
+
+```
+http://localhost:8080/graphiql?path=/graphql
+```
 
 ## 🧩​Time de Desenvolvimento
 
