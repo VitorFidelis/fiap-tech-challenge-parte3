@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Banco para agendamento-service
+  db-agendamento:
+    image: postgres:16
+    container_name: db-agendamento
+    environment:
+      POSTGRES_DB: agendamento_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_AGENDAMENTO_PORT:-5433}:5432"
+    volumes:
+      - db_agendamento_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d agendamento_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Banco para notificacao-service
+  db-notificacao:
+    image: postgres:16
+    container_name: db-notificacao
+    environment:
+      POSTGRES_DB: notificacao_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_NOTIFICACAO_PORT:-5434}:5432"
+    volumes:
+      - db_notificacao_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d notificacao_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Serviço principal de agendamento
+  agendamento-service:
+    build: ./agendamento  # ou o caminho correto para seu Dockerfile
+    container_name: agendamento-service
+    ports:
+      - "8080:8080"   # porta principal do serviço de agendamento
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: agendamento_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-agendamento:5432/agendamento_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      # Configurações para comunicação com outros serviços
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    depends_on:
+      db-agendamento:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # RabbitMQ (com painel web)
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_agendamento_data:
+  db_notificacao_data:
