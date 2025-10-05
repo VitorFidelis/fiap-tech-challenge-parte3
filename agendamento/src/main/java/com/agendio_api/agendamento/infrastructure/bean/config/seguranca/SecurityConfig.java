@@ -33,22 +33,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        // endpoints públicos (criacao usuarios, login e graphi)
-                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/pacientes/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/medicos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/enfermeiros/**").permitAll()
+                        // endpoints públicos
+                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
+                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pacientes").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/medicos").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/enfermeiros").permitAll()
 
-                        // restrições de acesso
-                        .requestMatchers("/pacientes/**").hasAnyRole("PACIENTE","MEDICO","ENFERMEIRO")
-                        .requestMatchers("/medicos/**").hasRole("MEDICO")
-                        .requestMatchers("/enfermeiros/**").hasRole("ENFERMEIRO")
+                        // Use hasAuthority em vez de hasRole
+                        .requestMatchers(HttpMethod.GET, "/pacientes/todos").hasAnyAuthority("ROLE_MEDICO", "ROLE_ENFERMEIRO")
+                        .requestMatchers("/pacientes/**").hasAnyAuthority("ROLE_PACIENTE", "ROLE_MEDICO", "ROLE_ENFERMEIRO")
+                        .requestMatchers("/medicos/**").hasAuthority("ROLE_MEDICO")
+                        .requestMatchers("/enfermeiros/**").hasAuthority("ROLE_ENFERMEIRO")
 
-                        // qualquer outra rota exige autenticação
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                );
         return http.build();
     }
 

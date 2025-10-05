@@ -27,7 +27,7 @@ public class JwtTokenProvider {
 
         return JWT.create()
                 .withSubject(userPrincipal.getUsername())
-                .withClaim("role", userPrincipal.getAuthorities().iterator().next().getAuthority())
+                .withClaim("role", userPrincipal.getRole())
                 .withClaim("userId", userPrincipal.getId().toString())
                 .withClaim("nome", userPrincipal.getNome())
                 .withIssuedAt(now)

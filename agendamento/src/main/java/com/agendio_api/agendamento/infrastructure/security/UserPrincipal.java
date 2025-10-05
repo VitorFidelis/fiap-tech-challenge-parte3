@@ -20,20 +20,27 @@ public class UserPrincipal implements UserDetails {
     private String senha;
     @Getter
     private String nome;
+
+    @Getter
+    private String role; // <-- aqui entra
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(UUID id, String email, String senha, String nome,
+                         String role,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.senha = senha;
         this.nome = nome;
+        this.role = role;
         this.authorities = authorities;
     }
 
     public static UserPrincipal create(Usuario usuario) {
+        String role = usuario.getRole().toString();
         Collection<GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority("ROLE_" + usuario.getRole())
+                new SimpleGrantedAuthority("ROLE_" + role)
         );
 
         return new UserPrincipal(
@@ -41,6 +48,7 @@ public class UserPrincipal implements UserDetails {
                 usuario.getEmail(),
                 usuario.getSenha(),
                 usuario.getNome(),
+                role, // salva também o nome puro
                 authorities
         );
     }
@@ -51,6 +59,7 @@ public class UserPrincipal implements UserDetails {
                 p.getEmail(),
                 p.getSenha(),
                 p.getNome(),
+                p.getRole().toString(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + p.getRole()))
         );
     }
@@ -61,6 +70,7 @@ public class UserPrincipal implements UserDetails {
                 m.getEmail(),
                 m.getSenha(),
                 m.getNome(),
+                m.getRole().toString(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + m.getRole()))
         );
     }
@@ -71,6 +81,7 @@ public class UserPrincipal implements UserDetails {
                 e.getEmail(),
                 e.getSenha(),
                 e.getNome(),
+                e.getRole().toString(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + e.getRole()))
         );
     }
