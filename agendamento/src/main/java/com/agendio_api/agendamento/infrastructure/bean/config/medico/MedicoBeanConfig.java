@@ -13,6 +13,7 @@ import com.agendio_api.agendamento.infrastructure.datasource.jpa.medico.JpaMedic
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.medico.JpaMedicoRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class MedicoBeanConfig {
     }
 
     @Bean
-    CadastrarMedicoUseCase registerCadastrarMedicoUseCase(MedicoGateway gateway, IMedicoMapper mapper, List<MedicoValidator> validators) {
-        return new CadastrarMedicoUseCaseImpl(gateway, mapper, validators);
+    CadastrarMedicoUseCase registerCadastrarMedicoUseCase(MedicoGateway gateway, IMedicoMapper mapper, List<MedicoValidator> validators, BCryptPasswordEncoder passwordEncoder) {
+        return new CadastrarMedicoUseCaseImpl(gateway, mapper, validators, passwordEncoder);
     }
 
     @Bean

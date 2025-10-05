@@ -19,7 +19,7 @@ public class LoginController {
         this.loginControllerInputPort = loginControllerInputPort;
     }
 
-    @PostMapping("/login")
+    @PostMapping()
     public JwtTokenDTO login(@RequestBody UserLoginDTO userLoginDTO) {
         return loginControllerInputPort.login(userLoginDTO);
     }

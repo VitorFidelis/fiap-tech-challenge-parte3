@@ -34,8 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         // endpoints públicos (criacao usuarios, login e graphi)
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pacientes/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/medicos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/enfermeiros/**").permitAll()
@@ -58,8 +57,4 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

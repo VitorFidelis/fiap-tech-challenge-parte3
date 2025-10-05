@@ -13,6 +13,7 @@ import com.agendio_api.agendamento.infrastructure.datasource.jpa.paciente.JpaPac
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.paciente.JpaPacienteRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class PacienteBeanConfig {
     }
 
     @Bean
-    CadastrarPacienteUseCase registerCadastrarPacienteUseCase(PacienteGateway pacienteGateway, IPacienteMapper pacienteMapper, List<PacienteValidator> pacienteValidators) {
-        return new CadastrarPacienteUseCaseImpl(pacienteGateway, pacienteMapper, pacienteValidators);
+    CadastrarPacienteUseCase registerCadastrarPacienteUseCase(PacienteGateway pacienteGateway, IPacienteMapper pacienteMapper, List<PacienteValidator> pacienteValidators, BCryptPasswordEncoder passwordEncoder) {
+        return new CadastrarPacienteUseCaseImpl(pacienteGateway, pacienteMapper, pacienteValidators, passwordEncoder);
     }
 
     @Bean

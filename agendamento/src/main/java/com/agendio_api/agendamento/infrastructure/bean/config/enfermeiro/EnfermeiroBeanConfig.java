@@ -13,6 +13,7 @@ import com.agendio_api.agendamento.infrastructure.datasource.jpa.enfermeiro.JpaE
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.enfermeiro.JpaEnfermeiroRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class EnfermeiroBeanConfig {
     }
 
     @Bean
-    CadastrarEnfermeiroUseCase registerCadastrarEnfermeiroUseCase(EnfermeiroGateway enfermeiroGateway, IEnfermeiroMapper enfermeiroMapper, List<EnfermeiroValidator> enfermeiroValidators) {
-        return new CadastrarEnfermeiroUseCaseImpl(enfermeiroGateway, enfermeiroMapper, enfermeiroValidators);
+    CadastrarEnfermeiroUseCase registerCadastrarEnfermeiroUseCase(EnfermeiroGateway enfermeiroGateway, IEnfermeiroMapper enfermeiroMapper, List<EnfermeiroValidator> enfermeiroValidators, BCryptPasswordEncoder passwordEncoder) {
+        return new CadastrarEnfermeiroUseCaseImpl(enfermeiroGateway, enfermeiroMapper, enfermeiroValidators, passwordEncoder);
     }
 
     @Bean

@@ -1,5 +1,8 @@
 package com.agendio_api.agendamento.infrastructure.security;
 
+import com.agendio_api.agendamento.domain.model.usuario.Enfermeiro;
+import com.agendio_api.agendamento.domain.model.usuario.Medico;
+import com.agendio_api.agendamento.domain.model.usuario.Paciente;
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,6 +42,36 @@ public class UserPrincipal implements UserDetails {
                 usuario.getSenha(),
                 usuario.getNome(),
                 authorities
+        );
+    }
+
+    public static UserPrincipal createFromPaciente(Paciente p) {
+        return new UserPrincipal(
+                p.getId(),
+                p.getEmail(),
+                p.getSenha(),
+                p.getNome(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + p.getRole()))
+        );
+    }
+
+    public static UserPrincipal createFromMedico(Medico m) {
+        return new UserPrincipal(
+                m.getId(),
+                m.getEmail(),
+                m.getSenha(),
+                m.getNome(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + m.getRole()))
+        );
+    }
+
+    public static UserPrincipal createFromEnfermeiro(Enfermeiro e) {
+        return new UserPrincipal(
+                e.getId(),
+                e.getEmail(),
+                e.getSenha(),
+                e.getNome(),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + e.getRole()))
         );
     }
 
