@@ -87,48 +87,6 @@ Depois do comando a cima, podemos validar se os containers estão em execução:
   docker compose ps
 ```
 
-Outra forma de testar se os containers estão em execução é atraves de um Script em bash,
-disponibilizado na raiz do projeto ***test_services.sh***.
-
-```Shell
-  ./test_services.sh
-```
-
-Ao executar o comando a cima a saida esperada do teste é:
-
-```Texte
-🔎 Testando containers...
-db-agendamento    Up 30 seconds (healthy)
-db-notificacao    Up 30 seconds (healthy)
-rabbitmq          Up 30 seconds (healthy)
-
-⏳ Testando conexão ao banco agendamento_db no container db-agendamento...
-✅ agendamento_db OK
-⏳ Testando conexão ao banco notificacao_db no container db-notificacao...
-✅ notificacao_db OK
-⏳ Testando conexão ao banco historico_db no container db-historico...
-✅ historico_db OK
-
-⏳ Testando RabbitMQ...
-✅ RabbitMQ OK (painel acessível em http://localhost:15672)
-
-🚀 Testes finalizados!
-```
-
-### Executar com a linha de comando spring-boot:run
-
-Após executar o seguinte comando:
-
-⚠️ ​Importante: certifique-se de que você está no mesmo diretório de pom.xml Em cada módulo executado:
-
-```Shell
-  mvn spring-boot:run
-```
-
-link para mais! [info-docker](guide/info-docker.md).
-
----
-
 ## Como testar:
 Há uma coleção do postman na pasta Resource, para teste dos endpoints em REST. Para os endpoints em GraphQL, é preciso utilizar o link:
 
