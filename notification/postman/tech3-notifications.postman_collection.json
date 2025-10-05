@@ -1,0 +1,34 @@
+{
+  "info": {
+    "name": "tech3-notifications-v0.0.2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auditoria - Lembretes por consultaId",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/lembretes/consulta/{{consultaId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "lembretes",
+            "consulta",
+            "{{consultaId}}"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "consultaId",
+      "value": "abc-123"
+    }
+  ]
+}
