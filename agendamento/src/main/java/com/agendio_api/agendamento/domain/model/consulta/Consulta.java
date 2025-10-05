@@ -117,7 +117,6 @@ public class Consulta extends BaseEntity {
     public Consulta atualizar(Consulta consulta) {
         this.horarioSolicitado = consulta.getHorarioSolicitado();
         this.observacoes = consulta.getObservacoes();
-        this.status = consulta.getStatus();
         return new Consulta(
                 this.id,
                 this.medicoId,

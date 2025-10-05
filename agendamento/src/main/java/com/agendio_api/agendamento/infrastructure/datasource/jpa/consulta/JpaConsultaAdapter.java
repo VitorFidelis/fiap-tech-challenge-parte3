@@ -104,6 +104,7 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
         return consultaMapper.toDomain(consultaSalva);
     }
 
+
     @Override
     @Transactional
     public void cancelar(UUID id, String motivoCancelamento) {
@@ -180,6 +181,7 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
 
         return new PaginatedResult<>(consultas, pageResult.getTotalElements(), pageResult.getTotalPages());
     }
+
     @Override
     public List<Consulta> listarComFiltrosFlexiveis(ListarConsultaGraphqlDTO filtro) {
         List<JpaConsultaEntity> consulta = consultaRepository.findByFilter(filtro.getPacienteId(),

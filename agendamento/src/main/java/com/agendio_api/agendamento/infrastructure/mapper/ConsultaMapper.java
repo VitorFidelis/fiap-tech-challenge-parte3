@@ -76,7 +76,6 @@ public final class ConsultaMapper implements IConsultaMapper {
     @Override
     public Consulta toDomain(AtualizaConsultaDTO dto, Consulta consultaExistente) {
         consultaExistente.setHorarioSolicitado(dto.horarioSolicitado());
-        consultaExistente.setStatus(dto.status());
         consultaExistente.setObservacoes(dto.observacoes());
         return consultaExistente;
     }
