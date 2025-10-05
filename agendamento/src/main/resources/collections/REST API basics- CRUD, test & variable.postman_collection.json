@@ -131,7 +131,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"nome\": \"João da Silva\",\n  \"email\": \"joao.silo@hospital.com\",\n  \"senha\": \"1234567qq\",\n  \"coren\": \"12.345.67-5\"\n}\n",
+							"raw": "{\n  \"nome\": \"Michael Jackson\",\n  \"email\": \"michael.jackson@hospital.com\",\n  \"senha\": \"1234567qq\",\n  \"coren\": \"12.345.67-0\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -268,13 +268,20 @@
 									"});"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/pacientes/todos",
 							"host": [
@@ -344,7 +351,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nome\": \"ana maria\",\n    \"email\": \"anamaria@email.com\",\n    \"senha\": \"jhdjsdhu454\",\n    \"dataNascimento\": \"1980-10-19\"\n}",
+							"raw": "{\n\t\"nome\": \"Billie Jean\",\n    \"email\": \"billie.jean@email.com\",\n    \"senha\": \"jhdjsdhu454\",\n    \"dataNascimento\": \"1980-10-19\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -593,13 +600,20 @@
 									"pm.environment.set(\"idConsulta\", jsonData.id);"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"idPaciente\": \"{{idPaciente}}\",\r\n  \"idMedico\": \"{{idMedico}}\",\r\n  \"idEnfermeiro\": \"{{idEnfermeiro}}\",\r\n  \"horarioSolicitado\": \"2025-09-25T14:00:00\",\r\n  \"observacoes\": \"Consulta de rotina\"\r\n}\r\n",
@@ -625,7 +639,13 @@
 					"name": "Put consulta",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/consultas/{{id}}",
 							"host": [
@@ -643,7 +663,13 @@
 					"name": "Cancelar consulta",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/consultas/{{id}}",
 							"host": [
@@ -719,7 +745,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"joão santos\",\r\n    \"email\": \"joao-santos@medico.com\",\r\n    \"senha\": \"quesenha23\",\r\n    \"crm\": \"CRF/UF 123245\",\r\n    \"especialidade\": \"oncologia\"\r\n}",
+							"raw": "{\r\n    \"nome\": \"katia flavia godiva do iraja\",\r\n    \"email\": \"katia.flavia@medico.com\",\r\n    \"senha\": \"quesenha23\",\r\n    \"crm\": \"CRF/UF 12340\",\r\n    \"especialidade\": \"oncologia\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -847,7 +873,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"login\": \"anamaria@email.com\",\n    \"password\": \"jhdjsdhu454\"\n}",
+					"raw": "{\n    \"login\": \"katia.flavia@medico.com\",\n    \"password\": \"quesenha23\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
