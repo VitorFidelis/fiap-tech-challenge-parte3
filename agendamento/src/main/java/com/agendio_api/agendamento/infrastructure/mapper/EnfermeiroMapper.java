@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.enfermeiro.AtualizaEnfer
 import com.agendio_api.agendamento.application.port.dto.enfermeiro.CadastraEnfermeiroDTO;
 import com.agendio_api.agendamento.application.port.dto.enfermeiro.EnfermeiroResponseDTO;
 import com.agendio_api.agendamento.application.port.mapper.enfermeiro.IEnfermeiroMapper;
+import com.agendio_api.agendamento.domain.model.enums.Role;
 import com.agendio_api.agendamento.domain.model.usuario.Enfermeiro;
 import com.agendio_api.agendamento.domain.model.valueobject.Coren;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.enfermeiro.JpaEnfermeiroEntity;
@@ -50,6 +51,7 @@ public class EnfermeiroMapper implements IEnfermeiroMapper {
         jpaEnfermeiroEntity.setAtivo(enfermeiro.isAtivo());
         jpaEnfermeiroEntity.setCriadoEm(enfermeiro.getCriadoEm());
         jpaEnfermeiroEntity.setAtualizadoEm(enfermeiro.getAtualizadoEm());
+        jpaEnfermeiroEntity.setRole(enfermeiro.getRole());
         return jpaEnfermeiroEntity;
     }
 
@@ -66,6 +68,7 @@ public class EnfermeiroMapper implements IEnfermeiroMapper {
         enfermeiroExistente.setNome(atualizaEnfermeiroDTO.nome());
         enfermeiroExistente.setEmail(atualizaEnfermeiroDTO.email());
         enfermeiroExistente.setCoren(Coren.of(atualizaEnfermeiroDTO.coren()));
+        enfermeiroExistente.setRole(Role.ENFERMEIRO);
         return enfermeiroExistente;
     }
 

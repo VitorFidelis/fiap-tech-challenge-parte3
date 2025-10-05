@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.medico.AtualizaMedicoDTO
 import com.agendio_api.agendamento.application.port.dto.medico.CadastraMedicoDTO;
 import com.agendio_api.agendamento.application.port.dto.medico.MedicoResponseDTO;
 import com.agendio_api.agendamento.application.port.mapper.medico.IMedicoMapper;
+import com.agendio_api.agendamento.domain.model.enums.Role;
 import com.agendio_api.agendamento.domain.model.usuario.Medico;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.medico.JpaMedicoEntity;
 import org.springframework.stereotype.Component;
@@ -47,6 +48,7 @@ public class MedicoMapper implements IMedicoMapper {
         jpaEntity.setAtivo(medico.isAtivo());
         jpaEntity.setCriadoEm(medico.getCriadoEm());
         jpaEntity.setAtualizadoEm(medico.getAtualizadoEm());
+        jpaEntity.setRole(medico.getRole());
         return jpaEntity;
     }
 
@@ -68,6 +70,7 @@ public class MedicoMapper implements IMedicoMapper {
         medicoExistente.setSenha(atualizaMedicoDTO.senha());
         medicoExistente.setCrm(atualizaMedicoDTO.crm());
         medicoExistente.setEspecialidade(atualizaMedicoDTO.especialidade());
+        medicoExistente.setRole(Role.MEDICO);
         return medicoExistente;
     }
 

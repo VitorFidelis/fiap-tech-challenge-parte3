@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.paciente.AtualizaPacient
 import com.agendio_api.agendamento.application.port.dto.paciente.CadastraPacienteDTO;
 import com.agendio_api.agendamento.application.port.dto.paciente.PacienteResponseDTO;
 import com.agendio_api.agendamento.application.port.mapper.paciente.IPacienteMapper;
+import com.agendio_api.agendamento.domain.model.enums.Role;
 import com.agendio_api.agendamento.domain.model.usuario.Paciente;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.paciente.JpaPacienteEntity;
 import org.springframework.stereotype.Component;
@@ -47,6 +48,7 @@ public class PacienteMapper implements IPacienteMapper {
         jpaPacienteEntity.setAtivo(paciente.isAtivo());
         jpaPacienteEntity.setCriadoEm(paciente.getCriadoEm());
         jpaPacienteEntity.setAtualizadoEm(paciente.getAtualizadoEm());
+        jpaPacienteEntity.setRole(Role.PACIENTE);
         return jpaPacienteEntity;
     }
 
@@ -63,6 +65,7 @@ public class PacienteMapper implements IPacienteMapper {
         pacienteExistente.setNome(atualizaPacienteDTO.nome());
         pacienteExistente.setEmail(atualizaPacienteDTO.email());
         pacienteExistente.setDataNascimento(atualizaPacienteDTO.dataNascimento());
+        pacienteExistente.setRole(Role.PACIENTE);
         return pacienteExistente;
     }
 
