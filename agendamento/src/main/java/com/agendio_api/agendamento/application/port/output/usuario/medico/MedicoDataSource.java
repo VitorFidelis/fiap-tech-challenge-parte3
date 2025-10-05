@@ -102,4 +102,6 @@ public interface MedicoDataSource {
             PaginatedRequestDTO paginacao
     );
 
+    Optional<Medico> buscarPorEmail(String email);
+
 }

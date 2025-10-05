@@ -77,4 +77,6 @@ public interface PacienteGateway {
      */
     boolean estaAtivo(UUID id);
 
+    Optional<Paciente> buscarPorEmail(String email);
+
 }

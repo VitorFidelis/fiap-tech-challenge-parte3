@@ -3,6 +3,7 @@ package com.agendio_api.agendamento.infrastructure.bean.config.seguranca;
 import com.agendio_api.agendamento.infrastructure.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -32,12 +33,19 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/graphql/**").permitAll()
-                        .requestMatchers("/graphiql/**").permitAll()
-//                        .requestMatchers("/api/pacientes/**").hasAnyRole("PACIENTE", "MEDICO", "ENFERMEIRO")
-//                        .requestMatchers("/api/medicos/**").hasRole("MEDICO")
-//                        .requestMatchers("/api/enfermeiros/**").hasRole("ENFERMEIRO")
+                        // endpoints públicos (criacao usuarios, login e graphi)
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/graphql/**", "/graphiql/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/pacientes/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/medicos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/enfermeiros/**").permitAll()
+
+                        // restrições de acesso
+                        .requestMatchers("/pacientes/**").hasAnyRole("PACIENTE","MEDICO","ENFERMEIRO")
+                        .requestMatchers("/medicos/**").hasRole("MEDICO")
+                        .requestMatchers("/enfermeiros/**").hasRole("ENFERMEIRO")
+
+                        // qualquer outra rota exige autenticação
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

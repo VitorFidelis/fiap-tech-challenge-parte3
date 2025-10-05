@@ -50,4 +50,9 @@ public class EnfermeiroGatewayImpl implements EnfermeiroGateway {
     public boolean estaAtivo(UUID id) {
         return enfermeiroDataSource.estaAtivo(id);
     }
+
+    @Override
+    public Optional<Enfermeiro> buscarPorEmail(String email) {
+        return enfermeiroDataSource.buscarPorEmail(email);
+    }
 }

@@ -89,4 +89,9 @@ public class JpaPacienteAdapter implements PacienteDataSource {
         Paciente paciente = pacienteMapper.toDomain(entity);
         return paciente.isAtivo();
     }
+
+    @Override
+    public Optional<Paciente> buscarPorEmail(String email) {
+        return repository.findByEmail(email).map(pacienteMapper::toDomain);
+    }
 }

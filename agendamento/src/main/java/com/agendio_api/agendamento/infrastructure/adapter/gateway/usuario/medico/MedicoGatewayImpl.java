@@ -71,4 +71,9 @@ public class MedicoGatewayImpl implements MedicoGateway {
     public boolean verificarDisponibilidade(UUID medicoId, LocalDateTime dataHora) {
         return false;
     }
+
+    @Override
+    public Optional<Medico> buscarPorEmail(String email) {
+        return dataSource.buscarPorEmail(email);
+    }
 }

@@ -80,4 +80,6 @@ public interface EnfermeiroDataSource {
      * @return O enfermeiro reativado
      */
     Enfermeiro reativar(UUID id);
+
+    Optional<Enfermeiro> buscarPorEmail(String email);
 }

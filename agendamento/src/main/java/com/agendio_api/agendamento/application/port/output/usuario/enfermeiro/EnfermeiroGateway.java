@@ -71,4 +71,6 @@ public interface EnfermeiroGateway {
      * @return true se o enfermeiro estiver ativo, false caso contrário
      */
     boolean estaAtivo(UUID id);
+
+    Optional<Enfermeiro> buscarPorEmail(String email);
 }

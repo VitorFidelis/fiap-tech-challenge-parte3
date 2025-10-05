@@ -118,4 +118,5 @@ public interface MedicoGateway {
      */
     boolean verificarDisponibilidade(UUID medicoId, java.time.LocalDateTime dataHora);
 
+    Optional<Medico> buscarPorEmail(String email);
 }

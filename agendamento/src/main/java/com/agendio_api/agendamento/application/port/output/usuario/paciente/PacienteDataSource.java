@@ -75,4 +75,6 @@ public interface PacienteDataSource {
      */
     boolean estaAtivo(UUID id);
 
+    Optional<Paciente> buscarPorEmail(String email);
+
 }

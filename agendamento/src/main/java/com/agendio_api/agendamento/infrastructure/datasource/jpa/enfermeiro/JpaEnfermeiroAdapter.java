@@ -119,4 +119,9 @@ public class JpaEnfermeiroAdapter implements EnfermeiroDataSource {
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Enfermeiro não encontrado"));
     }
 
+    @Override
+    public Optional<Enfermeiro> buscarPorEmail(String email) {
+        return repository.findByEmail(email).map(enfermeiroMapper::toDomain);
+    }
+
 }

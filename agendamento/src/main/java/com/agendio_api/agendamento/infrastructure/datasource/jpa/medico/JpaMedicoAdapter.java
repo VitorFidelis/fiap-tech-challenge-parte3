@@ -126,4 +126,9 @@ public class JpaMedicoAdapter implements MedicoDataSource {
                 pageResult.getTotalPages()
         );
     }
+
+    @Override
+    public Optional<Medico> buscarPorEmail(String email) {
+        return repository.findByEmail(email).map(medicoMapper::toDomainFromJPA);
+    }
 }

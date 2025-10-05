@@ -50,4 +50,9 @@ public class PacienteGatewayImpl implements PacienteGateway {
     public boolean estaAtivo(UUID id) {
         return dataSource.estaAtivo(id);
     }
+
+    @Override
+    public Optional<Paciente> buscarPorEmail(String email) {
+        return dataSource.buscarPorEmail(email);
+    }
 }
