@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # Banco para agendamento-service
   db-agendamento:
@@ -8,7 +10,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "${DB_AGENDAMENTO_PORT:-5433}:5432"
+      - "${DB_AGENDAMENTO_PORT:-5433}:5432" # EXPORTA 5433 -> 5432 INTERNO
     volumes:
       - db_agendamento_data:/var/lib/postgresql/data
     healthcheck:
@@ -17,83 +19,44 @@ services:
       timeout: 5s
       retries: 5
 
-  #################################################################################
-  # Banco para notificacao-service
-  db-notificacao:
-    image: postgres:16
-    container_name: db-notificacao
-    environment:
-      POSTGRES_DB: notificacao_db
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #Serviço de agendamento de consultas
+  agendamento-service:
+    build:
+      context: .
+      dockerfile: agendamento/Dockerfile
+    container_name: agendamento-service
     ports:
-      - "${DB_NOTIFICACAO_PORT:-5434}:5432"
-    volumes:
-      - db_notificacao_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d notificacao_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  #################################################################################
-  # Banco para historico-service
-  db-historico:
-    image: postgres:16
-    container_name: db-historico
+      - "8080:8080"
     environment:
-      POSTGRES_DB: historico_db
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "${DB_HISTORICO_PORT:-5435}:5432"
-    volumes:
-      - db_historico_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d historico_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-
-
-  #################################################################################
-  # Banco para service-gateway
-  db-gateway:
-    image: postgres:16
-    container_name: db-gateway
-    environment:
-      POSTGRES_DB: gateway_db
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "${DB_GATEWAY_PORT:-5436}:5432"
-    volumes:
-      - db_gateway_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d gateway_db"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Serviço Spring Boot (exemplo: gateway)
-  gateway-service:
-    build: ./gateway
-    container_name: gateway-service
-    ports:
-      - "8080:8080"   # mapeia porta do host para a porta do container
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: gateway_db
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db-gateway:5432/gateway_db
+      # Configurações do PostgreSQL - DENTRO DA REDE DOCKER usa porta INTERNA 5432
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-agendamento:5432/agendamento_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+
+      # JWT
+      APP_JWT_SECRET: ${JWT_SECRET}
+      APP_JWT_EXPIRATION: 86400000
+
+      # Configurações para comunicação com outros serviços
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+
+      # Configurações Spring adicionais
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
     depends_on:
-      db-gateway:
+      db-agendamento:
         condition: service_healthy
-#################################################################################
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - default
 
   # RabbitMQ (com painel web)
   rabbitmq:
@@ -113,6 +76,3 @@ services:
 
 volumes:
   db_agendamento_data:
-  db_notificacao_data:
-  db_historico_data:
-  db_gateway_data:

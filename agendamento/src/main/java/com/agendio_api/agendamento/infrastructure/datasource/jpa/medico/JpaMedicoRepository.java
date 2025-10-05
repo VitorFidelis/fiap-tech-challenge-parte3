@@ -1,0 +1,27 @@
+package com.agendio_api.agendamento.infrastructure.datasource.jpa.medico;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.nio.channels.FileChannel;
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface JpaMedicoRepository extends JpaRepository<JpaMedicoEntity, UUID> {
+    Optional<JpaMedicoEntity> findByCrm(String crm);
+
+    boolean existsByCrm(String crm);
+
+    Optional<JpaMedicoEntity> findByIdAndAtivoTrue(UUID id);
+
+    Page<JpaMedicoEntity> findByEspecialidadeIgnoreCaseAndAtivoTrue(String especialidade, Pageable pageable);
+
+    Optional<JpaMedicoEntity> findByCrmAndAtivoTrue(String crm);
+
+    Page<JpaMedicoEntity> findAllByAtivoTrue(Pageable pageable);
+
+    Optional<JpaMedicoEntity> findByEmail(String email);
+}

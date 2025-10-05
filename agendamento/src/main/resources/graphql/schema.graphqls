@@ -1,0 +1,52 @@
+scalar DateTime
+
+enum StatusConsulta {
+    AGENDADA
+    CANCELADA
+    REALIZADA
+}
+
+type Consulta {
+    id: ID!
+    medicoId: ID!
+    enfermeiroId: ID!
+    pacienteId: ID!
+    horarioSolicitado: DateTime!
+    status: StatusConsulta
+    observacoes: String
+    criadoEm: DateTime
+    atualizadoEm: DateTime
+}
+
+input ListarConsultaInput {
+    pacienteId: ID
+    medicoId: ID
+    enfermeiroId: ID
+    status: StatusConsulta
+    dataMin: DateTime
+    dataMax: DateTime
+}
+
+input AgendarConsultaInput {
+    medicoId: ID!
+    enfermeiroId: ID!
+    pacienteId: ID!
+    horarioSolicitado: DateTime!
+    observacoes: String
+}
+
+input AtualizarConsultaInput {
+    id: ID!
+    horarioSolicitado: String
+    status: StatusConsulta
+    observacoes: String
+}
+
+type Query {
+    listarConsultas(input: ListarConsultaInput): [Consulta]
+}
+
+type Mutation {
+    agendarConsulta(input: AgendarConsultaInput!): Consulta
+    atualizarConsulta(input: AtualizarConsultaInput!): Consulta
+}

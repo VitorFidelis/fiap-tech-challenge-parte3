@@ -1,0 +1,202 @@
+package com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta;
+
+import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ListarConsultaGraphqlDTO;
+import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedRequestDTO;
+import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedResult;
+import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
+import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
+import com.agendio_api.agendamento.application.port.output.consulta.ConsultaDataSource;
+import com.agendio_api.agendamento.domain.model.consulta.Consulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.StatusConsulta;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@RequiredArgsConstructor
+public class JpaConsultaAdapter implements ConsultaDataSource {
+
+    private final JpaConsultaRepository consultaRepository;
+    private final IConsultaMapper consultaMapper;
+
+    @Override
+    @Transactional
+    public Consulta agendar(Consulta consulta) {
+        var jpaEntity = consultaMapper.toJpaConsultaEntity(consulta);
+        var savedEntity = consultaRepository.save(jpaEntity);
+        return consultaMapper.toDomain(savedEntity);
+    }
+
+    @Override
+    public Optional<Consulta> buscarPorId(UUID id) {
+        return consultaRepository.findByIdAndAtivoTrue(id)
+                .map(consultaMapper::toDomain);
+    }
+
+    @Override
+    public boolean existeConsultaNoHorario(UUID medicoId, LocalDateTime dataHora) {
+        return consultaRepository.existsByMedicoIdAndHorarioSolicitadoAndStatus(medicoId, dataHora, StatusConsulta.AGENDADA);
+    }
+
+    @Override
+    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(FiltroConsulta filtro, PaginatedRequestDTO paginacao) {
+        Pageable pageable = PageRequest.of(
+                paginacao.page(),
+                paginacao.size(),
+                Sort.by(paginacao.sort())
+        );
+
+        UUID medicoId = filtro.medicoId();
+        LocalDateTime inicio = filtro.periodo().inicio();
+        LocalDateTime fim = filtro.periodo().fim();
+
+        Page<JpaConsultaEntity> pageResult =
+                consultaRepository.findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(medicoId, inicio, fim, pageable, StatusConsulta.AGENDADA);
+
+        List<Consulta> consultas = pageResult
+                .getContent()
+                .stream()
+                .map(consultaMapper::toDomain)
+                .toList();
+
+        return new PaginatedResult<>(
+                consultas,
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages()
+        );
+    }
+
+
+    @Override
+    public PaginatedResult<Consulta> listarPorPeriodo(ConsultaFiltroRequestDTO filtro, PaginatedRequestDTO paginacao) {
+        Pageable pageable = PageRequest.of(
+                paginacao.page(),
+                paginacao.size(),
+                Sort.by(paginacao.sort())
+        );
+
+        UUID medicoId = filtro.medicoId();
+        LocalDateTime inicio = filtro.inicio();
+        LocalDateTime fim = filtro.fim();
+
+        Page<JpaConsultaEntity> pageResult =
+                consultaRepository.findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(
+                        medicoId,
+                        inicio,
+                        fim,
+                        pageable,
+                        StatusConsulta.AGENDADA
+                );
+
+        List<Consulta> consultas = pageResult
+                .getContent()
+                .stream()
+                .map(consultaMapper::toDomain)
+                .toList();
+
+        return new PaginatedResult<>(
+                consultas,
+                pageResult.getTotalElements(),
+                pageResult.getTotalPages()
+        );
+    }
+
+
+    @Override
+    @Transactional
+    public Consulta atualizar(Consulta consulta) {
+        var jpaEntity = consultaMapper.toJpaConsultaEntity(consulta);
+        var updatedEntity = consultaRepository.save(jpaEntity);
+        return consultaMapper.toDomain(updatedEntity);
+    }
+
+    @Override
+    @Transactional
+    public void cancelar(UUID id, String motivoCancelamento) {
+        consultaRepository.findById(id)
+                .map(consultaMapper::toDomain)
+                .ifPresent(consulta -> {
+                    consulta.cancelar(motivoCancelamento);
+                    consultaRepository.save(consultaMapper.toJpaConsultaEntity(consulta));
+                });
+    }
+
+    @Override
+    public boolean pacientePossuiConsultaNoHorario(UUID pacienteId, LocalDateTime inicio, LocalDateTime fim) {
+        return consultaRepository.existsByPacienteIdAndHorarioSolicitadoBetweenAndStatus(pacienteId, inicio, fim, StatusConsulta.AGENDADA);
+    }
+
+    @Override
+    public PaginatedResult<Consulta> listarPorPaciente(UsuarioIdFiltroPaginadoRequestDTO request) {
+        Pageable pageable = PageRequest.of(
+                request.paginacao().page(),
+                request.paginacao().size(),
+                Sort.by(request.paginacao().sort())
+        );
+
+        UUID pacienteId = request.usuarioId();
+
+        Page<JpaConsultaEntity> page = consultaRepository.findByPacienteIdAndAtivoTrue(pacienteId, pageable);
+
+        List<Consulta> consultas = page.getContent().stream()
+                .map(consultaMapper::toDomain)
+                .toList();
+
+        return new PaginatedResult<>(
+                consultas,
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+    }
+
+    @Override
+    public PaginatedResult<Consulta> listarPorEnfermeiro(UsuarioIdFiltroPaginadoRequestDTO request) {
+        Pageable pageable = PageRequest.of(request.paginacao().page(), request.paginacao().size(), Sort.by(request.paginacao().sort()));
+        Page<JpaConsultaEntity> page = consultaRepository.findByEnfermeiroIdAndAtivoTrue(request.usuarioId(), pageable);
+        List<Consulta> consultas = page.getContent().stream().map(consultaMapper::toDomain).toList();
+        return new PaginatedResult<>(consultas, page.getTotalElements(), page.getTotalPages());
+    }
+
+    @Override
+    public PaginatedResult<Consulta> listarPorMedico(UsuarioIdFiltroPaginadoRequestDTO filtro) {
+        Pageable pageable = PageRequest.of(filtro.paginacao().page(), filtro.paginacao().size(), Sort.by(filtro.paginacao().sort()));
+
+        Page<JpaConsultaEntity> page = consultaRepository.findByMedicoIdAndAtivoTrue(filtro.usuarioId(), pageable);
+        List<Consulta> consultas = page.getContent().stream().map(consultaMapper::toDomain).toList();
+        return new PaginatedResult<>(consultas, page.getTotalElements(), page.getTotalPages());
+    }
+
+    @Override
+    public PaginatedResult<Consulta> listarTodas(PaginatedRequestDTO paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size(), Sort.by(paginacao.sort()));
+
+        Page<JpaConsultaEntity> pageResult = consultaRepository.findAllByAtivoTrue(pageable);
+
+        List<Consulta> consultas = pageResult
+                .getContent()
+                .stream()
+                .map(consultaMapper::toDomain)
+                .toList();
+
+        return new PaginatedResult<>(consultas, pageResult.getTotalElements(), pageResult.getTotalPages());
+    }
+
+    @Override
+    public List<Consulta> listarComFiltrosFlexiveis(ListarConsultaGraphqlDTO filtro) {
+        List<JpaConsultaEntity> consulta = consultaRepository.findByFilter(filtro.getPacienteId(),
+                filtro.getMedicoId(), filtro.getEnfermeiroId(), filtro.getStatusConsulta(),
+                filtro.getDataMin(), filtro.getDataMax());
+
+        return consulta.stream().map(consultaMapper::toDomain).toList();
+    }
+
+}

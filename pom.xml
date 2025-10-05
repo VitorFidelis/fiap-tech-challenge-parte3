@@ -3,33 +3,48 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.6</version>
+        <relativePath/>
+    </parent>
+
     <groupId>br.com.mono-repo</groupId>
     <artifactId>mono-repo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>mono-repo</name>
-    <description>Mono-repo com múltiplos serviços</description>
+    <description>Mono-repo para agendamento e mensageria</description>
 
-    <!-- Gerenciamento de versões do Spring Boot -->
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
+            <!-- Dependências específicas que não estão no Spring Boot BOM -->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.5.6</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>4.5.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.graphql-java</groupId>
+                <artifactId>graphql-java-extended-scalars</artifactId>
+                <version>21.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <!-- Declaração dos módulos -->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
     <modules>
-        <module>gateway</module>
-        <!--
-        para os proximos serviços
-        <module>guide</module>
-        <module>servico-c</module>
-         -->
+        <module>agendamento</module>
     </modules>
 </project>
