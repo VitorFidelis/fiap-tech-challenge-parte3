@@ -96,7 +96,7 @@ http://localhost:8080/graphiql?path=/graphql
 
 ## 🧩​Time de Desenvolvimento
 
-- Eric Mone: [GitHub](https://github.com/ericmonne) |
+- Eric Monné: [GitHub](https://github.com/ericmonne) |
 
 - Lucas Vinicius: [GitHub](https://github.com/lcvinicius) |
 
