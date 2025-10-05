@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "e3eefad9-cda0-40fe-8210-4c0bddd1f869",
+		"_postman_id": "886cbd5e-0823-4172-883b-cfbeb31c4556",
 		"name": "REST API basics: CRUD, test & variable",
 		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18045712"
+		"_exporter_id": "49021122"
 	},
 	"item": [
 		{
@@ -102,7 +102,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						},
 						{
@@ -114,13 +115,20 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"João da Silva\",\n  \"email\": \"joao.silo@hospital.com\",\n  \"senha\": \"1234567qq\",\n  \"coren\": \"12.345.67-5\"\n}\n",
@@ -156,13 +164,20 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"nome\": \"João da Silva\",\n  \"email\": \"joao.s@hospital.com\",\n  \"coren\": \"12.345.67-1\"\n}",
@@ -173,13 +188,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/enfermeiros/{{id}}",
+							"raw": "{{base_url}}/enfermeiros/{{idEnfermeiro}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"enfermeiros",
-								"{{id}}"
+								"{{idEnfermeiro}}"
 							]
 						},
 						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
@@ -190,15 +205,21 @@
 					"name": "Desativar enfermeiro",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/enfermeiros/{{id}}/desativar",
+							"raw": "{{base_url}}/enfermeiros/{{idEnfermeiro}}/desativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"enfermeiros",
-								"{{id}}",
+								"{{idEnfermeiro}}",
 								"desativar"
 							]
 						}
@@ -209,15 +230,21 @@
 					"name": "Reativar enfermeiro",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/enfermeiros/{{id}}/reativar",
+							"raw": "{{base_url}}/enfermeiros/{{idEnfermeiro}}}/reativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"enfermeiros",
-								"{{id}}",
+								"{{idEnfermeiro}}}",
 								"reativar"
 							]
 						}
@@ -307,7 +334,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -316,7 +344,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nome\": \"joão\",\n    \"email\": \"joao@email.com\",\n    \"senha\": \"12ff12ff\",\n    \"dataNascimento\": \"1980-10-19\"\n}",
+							"raw": "{\n\t\"nome\": \"ana maria\",\n    \"email\": \"anamaria@email.com\",\n    \"senha\": \"jhdjsdhu454\",\n    \"dataNascimento\": \"1980-10-19\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,16 +377,23 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"nome\": \"joão louco\",\n    \"email\": \"joao@email.com\",\n    \"dataNascimento\": \"1990-10-10\"\n}",
+							"raw": "{\n\t\"nome\": \"ana maria martins\",\n    \"email\": \"anamaria@email.com\",\n    \"dataNascimento\": \"1990-10-10\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -366,13 +401,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/pacientes/{{id}}\n",
+							"raw": "{{base_url}}/pacientes/{{idPaciente}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"pacientes",
-								"{{id}}\n"
+								"{{idPaciente}}"
 							]
 						},
 						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
@@ -383,15 +418,21 @@
 					"name": "Desativar paciente",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/pacientes/{{id}}/desativar",
+							"raw": "{{base_url}}/pacientes/{{idPaciente}}/desativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"pacientes",
-								"{{id}}",
+								"{{idPaciente}}",
 								"desativar"
 							]
 						}
@@ -402,15 +443,21 @@
 					"name": "Reativar paciente",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/pacientes/{{id}}/reativar",
+							"raw": "{{base_url}}/pacientes/{{idPaciente}}/reativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"pacientes",
-								"{{id}}",
+								"{{idPaciente}}",
 								"reativar"
 							]
 						}
@@ -662,7 +709,8 @@
 									"pm.environment.set(\"idMedico\", jsonData.id);"
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -694,7 +742,13 @@
 					"name": "Put medico",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"nome\": \"juquinha\",\r\n    \"email\": \"juquinha@medico.com\",\r\n    \"senha\": \"alfabeta2\",\r\n    \"crm\": \"CRM/MG 121212\",\r\n    \"especialidade\": \"pediatria\"\r\n}",
@@ -705,13 +759,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/medicos/{{id}}",
+							"raw": "{{base_url}}/medicos/{{idMedico}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"medicos",
-								"{{id}}"
+								"{{idMedico}}"
 							]
 						}
 					},
@@ -721,15 +775,21 @@
 					"name": "Desativar medico",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/medicos/{{id}}/desativar",
+							"raw": "{{base_url}}/medicos/{{idMedico}}}/desativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"medicos",
-								"{{id}}",
+								"{{idMedico}}}",
 								"desativar"
 							]
 						}
@@ -740,15 +800,21 @@
 					"name": "Reativar medico",
 					"request": {
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt}}",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/medicos/{{id}}/reativar",
+							"raw": "{{base_url}}/medicos/{{idMedico}}}/reativar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"medicos",
-								"{{id}}",
+								"{{idMedico}}}",
 								"reativar"
 							]
 						}
@@ -756,6 +822,49 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "1 - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Capture JWT from response\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"jwt\", jsonData.tokenJwt);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"anamaria@email.com\",\n    \"password\": \"jhdjsdhu454\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/auth",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
