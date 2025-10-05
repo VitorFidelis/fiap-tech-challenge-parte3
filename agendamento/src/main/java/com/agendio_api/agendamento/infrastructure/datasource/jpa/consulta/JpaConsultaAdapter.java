@@ -7,8 +7,9 @@ import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedResul
 import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaDataSource;
+import com.agendio_api.agendamento.domain.exception.ConsultaNaoEncontradaException;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
 import com.agendio_api.agendamento.domain.model.consulta.StatusConsulta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +50,7 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
     }
 
     @Override
-    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(FiltroConsulta filtro, PaginatedRequestDTO paginacao) {
+    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(FiltroBuscaConsulta filtro, PaginatedRequestDTO paginacao) {
         Pageable pageable = PageRequest.of(
                 paginacao.page(),
                 paginacao.size(),
@@ -56,11 +58,16 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
         );
 
         UUID medicoId = filtro.medicoId();
-        LocalDateTime inicio = filtro.periodo().inicio();
-        LocalDateTime fim = filtro.periodo().fim();
+        LocalDate inicio = filtro.periodo().inicio();
+        LocalDate fim = filtro.periodo().fim();
+
+
+
+        LocalDateTime inicioDateTime = inicio.atStartOfDay();
+        LocalDateTime fimDateTime = fim.atTime(23, 59, 59);
 
         Page<JpaConsultaEntity> pageResult =
-                consultaRepository.findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(medicoId, inicio, fim, pageable, StatusConsulta.AGENDADA);
+                consultaRepository.findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(medicoId, inicioDateTime, fimDateTime, StatusConsulta.AGENDADA, pageable);
 
         List<Consulta> consultas = pageResult
                 .getContent()
@@ -74,60 +81,43 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
                 pageResult.getTotalPages()
         );
     }
-
 
     @Override
     public PaginatedResult<Consulta> listarPorPeriodo(ConsultaFiltroRequestDTO filtro, PaginatedRequestDTO paginacao) {
-        Pageable pageable = PageRequest.of(
-                paginacao.page(),
-                paginacao.size(),
-                Sort.by(paginacao.sort())
-        );
-
-        UUID medicoId = filtro.medicoId();
-        LocalDateTime inicio = filtro.inicio();
-        LocalDateTime fim = filtro.fim();
-
-        Page<JpaConsultaEntity> pageResult =
-                consultaRepository.findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(
-                        medicoId,
-                        inicio,
-                        fim,
-                        pageable,
-                        StatusConsulta.AGENDADA
-                );
-
-        List<Consulta> consultas = pageResult
-                .getContent()
-                .stream()
-                .map(consultaMapper::toDomain)
-                .toList();
-
-        return new PaginatedResult<>(
-                consultas,
-                pageResult.getTotalElements(),
-                pageResult.getTotalPages()
-        );
+        return null;
     }
-
 
     @Override
     @Transactional
     public Consulta atualizar(Consulta consulta) {
-        var jpaEntity = consultaMapper.toJpaConsultaEntity(consulta);
-        var updatedEntity = consultaRepository.save(jpaEntity);
-        return consultaMapper.toDomain(updatedEntity);
+        JpaConsultaEntity consultaExistente = consultaRepository
+                .findByIdAndAtivoTrue(consulta.getId())
+                .orElseThrow(
+                        () -> new ConsultaNaoEncontradaException("consulta não encontrada com id " + consulta.getId()));
+
+        consultaExistente.setHorarioSolicitado(consulta.getHorarioSolicitado());
+        consultaExistente.setObservacoes(consulta.getObservacoes());
+        consultaExistente.setStatus(consulta.getStatus());
+        consultaExistente.setAtualizadoEm(LocalDateTime.now());
+        JpaConsultaEntity consultaSalva = consultaRepository.save(consultaExistente);
+
+        return consultaMapper.toDomain(consultaSalva);
     }
 
     @Override
     @Transactional
     public void cancelar(UUID id, String motivoCancelamento) {
-        consultaRepository.findById(id)
-                .map(consultaMapper::toDomain)
-                .ifPresent(consulta -> {
-                    consulta.cancelar(motivoCancelamento);
-                    consultaRepository.save(consultaMapper.toJpaConsultaEntity(consulta));
-                });
+        JpaConsultaEntity consultaEntity = consultaRepository.findById(id)
+                .orElseThrow(() -> new ConsultaNaoEncontradaException("consulta não encontrada com id " + id));
+
+        Consulta consulta = consultaMapper.toDomain(consultaEntity);
+        Consulta consultaCancelada = consulta.cancelar(motivoCancelamento);
+
+        consultaEntity.setStatus(consultaCancelada.getStatus());
+        consultaEntity.setObservacoes(consultaCancelada.getObservacoes());
+        consultaEntity.setAtualizadoEm(consultaCancelada.getAtualizadoEm());
+        consultaEntity.setAtivo(consultaCancelada.isAtivo());
+        consultaRepository.save(consultaEntity);
     }
 
     @Override
@@ -175,6 +165,7 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
         return new PaginatedResult<>(consultas, page.getTotalElements(), page.getTotalPages());
     }
 
+
     @Override
     public PaginatedResult<Consulta> listarTodas(PaginatedRequestDTO paginacao) {
         Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size(), Sort.by(paginacao.sort()));
@@ -189,7 +180,6 @@ public class JpaConsultaAdapter implements ConsultaDataSource {
 
         return new PaginatedResult<>(consultas, pageResult.getTotalElements(), pageResult.getTotalPages());
     }
-
     @Override
     public List<Consulta> listarComFiltrosFlexiveis(ListarConsultaGraphqlDTO filtro) {
         List<JpaConsultaEntity> consulta = consultaRepository.findByFilter(filtro.getPacienteId(),

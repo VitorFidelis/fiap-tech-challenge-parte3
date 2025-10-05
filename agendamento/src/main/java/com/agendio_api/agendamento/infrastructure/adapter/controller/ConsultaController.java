@@ -1,10 +1,7 @@
 package com.agendio_api.agendamento.infrastructure.adapter.controller;
 
 import com.agendio_api.agendamento.api.routes.RotasConsulta;
-import com.agendio_api.agendamento.application.port.dto.consulta.AgendaConsultaDTO;
-import com.agendio_api.agendamento.application.port.dto.consulta.CancelarConsultaRequestDTO;
-import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
-import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaResponseDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.*;
 import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedRequestDTO;
 import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedResponseDTO;
 import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -45,7 +42,7 @@ public class ConsultaController {
         return ResponseEntity.ok(consulta);
     }
 
-    @PatchMapping(RotasConsulta.CONSULTA_COM_ID_CANCELAR)
+    @PatchMapping(RotasConsulta.CANCELAR)
     public ResponseEntity<Void> cancelarConsulta(@PathVariable UUID id,
                                                  @RequestBody CancelarConsultaRequestDTO dto) {
         consultaControllerInputPort.cancelar(id, dto.motivoCancelamento());
@@ -66,13 +63,13 @@ public class ConsultaController {
 
     @GetMapping(RotasConsulta.POR_PACIENTE)
     public ResponseEntity<PaginatedResponseDTO<ConsultaResponseDTO>> buscarConsultasPorPaciente(
-            @PathVariable UUID pacienteId,
+            @PathVariable UUID idPaciente,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "horarioSolicitado") String sort) {
 
         PaginatedRequestDTO paginacao = new PaginatedRequestDTO(page, size, sort);
-        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(pacienteId, paginacao);
+        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(idPaciente, paginacao);
         PaginatedResponseDTO<ConsultaResponseDTO> resultado =
                 consultaControllerInputPort.listarPorPaciente(filtroPaginado);
         return ResponseEntity.ok(resultado);
@@ -81,13 +78,13 @@ public class ConsultaController {
 
     @GetMapping(RotasConsulta.POR_ENFERMEIRO)
     public ResponseEntity<PaginatedResponseDTO<ConsultaResponseDTO>> buscarConsultasPorEnfermeiro(
-            @PathVariable UUID enfermeiroId,
+            @PathVariable UUID idEnfermeiro,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "horarioSolicitado") String sort) {
 
         PaginatedRequestDTO paginacao = new PaginatedRequestDTO(page, size, sort);
-        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(enfermeiroId, paginacao);
+        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(idEnfermeiro, paginacao);
         PaginatedResponseDTO<ConsultaResponseDTO> resultado =
                 consultaControllerInputPort.listarPorEnfermeiro(filtroPaginado);
         return ResponseEntity.ok(resultado);
@@ -96,34 +93,46 @@ public class ConsultaController {
 
     @GetMapping(RotasConsulta.POR_MEDICO_E_PERIODO)
     public ResponseEntity<PaginatedResponseDTO<ConsultaResponseDTO>> buscarConsultasPorMedicoEPeriodo(
-            @PathVariable UUID medicoId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fim,
+            @PathVariable UUID idMedico,
+
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim,
+
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "horarioSolicitado") String sort) {
 
+        ConsultaPorPeriodoRequestDTO filtro = new ConsultaPorPeriodoRequestDTO(inicio, fim);
         PaginatedRequestDTO paginacao = new PaginatedRequestDTO(page, size, sort);
-        ConsultaFiltroRequestDTO filtro = new ConsultaFiltroRequestDTO(medicoId, inicio, fim);
-        PaginatedResponseDTO<ConsultaResponseDTO> resultado =
-                consultaControllerInputPort.listarPorPeriodo(filtro, paginacao);
-        return ResponseEntity.ok(resultado);
+        ConsultaFiltroRequestDTO consultaFiltro = new ConsultaFiltroRequestDTO(idMedico, inicio, fim);
 
+        PaginatedResponseDTO<ConsultaResponseDTO> resultado =
+                consultaControllerInputPort.listarPorPeriodo(consultaFiltro, paginacao);
+
+        return ResponseEntity.ok(resultado);
     }
 
 
     @GetMapping(RotasConsulta.POR_MEDICO)
     public ResponseEntity<PaginatedResponseDTO<ConsultaResponseDTO>> buscarConsultasPorMedico(
-            @PathVariable UUID medicoId,
+            @PathVariable UUID idMedico,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "horarioSolicitado") String sort) {
 
         PaginatedRequestDTO paginacao = new PaginatedRequestDTO(page, size, sort);
-        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(medicoId, paginacao);
+        UsuarioIdFiltroPaginadoRequestDTO filtroPaginado = new UsuarioIdFiltroPaginadoRequestDTO(idMedico, paginacao);
         PaginatedResponseDTO<ConsultaResponseDTO> resultado =
                 consultaControllerInputPort.listarPorMedico(filtroPaginado);
         return ResponseEntity.ok(resultado);
 
+    }
+
+    @PutMapping(RotasConsulta.ID)
+    public ResponseEntity<ConsultaResponseDTO> atualizar(
+            @PathVariable UUID id,
+            @RequestBody AtualizaConsultaDTO dto) {
+        ConsultaResponseDTO consultaAtualizada = consultaControllerInputPort.atualizar(id, dto);
+        return ResponseEntity.ok(consultaAtualizada);
     }
 }

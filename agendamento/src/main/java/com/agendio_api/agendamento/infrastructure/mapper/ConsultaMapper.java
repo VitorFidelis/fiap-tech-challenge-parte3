@@ -8,8 +8,8 @@ import com.agendio_api.agendamento.application.port.dto.consulta.graphql.Atualiz
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
-import com.agendio_api.agendamento.domain.model.valueobject.PeriodoConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
+import com.agendio_api.agendamento.domain.model.valueobject.PeriodoConsultas;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta.JpaConsultaEntity;
 import org.springframework.stereotype.Component;
 
@@ -74,16 +74,15 @@ public final class ConsultaMapper implements IConsultaMapper {
     }
 
     @Override
-    public Consulta toDomain(AtualizaConsultaDTO atualizaConsultaDTO, Consulta consultaExistente) {
-        consultaExistente.setHorarioSolicitado(atualizaConsultaDTO.horarioSolicitado());
-        consultaExistente.setStatus(atualizaConsultaDTO.status());
-        consultaExistente.setObservacoes(atualizaConsultaDTO.observacoes());
+    public Consulta toDomain(AtualizaConsultaDTO dto, Consulta consultaExistente) {
+        consultaExistente.setHorarioSolicitado(dto.horarioSolicitado());
+        consultaExistente.setStatus(dto.status());
+        consultaExistente.setObservacoes(dto.observacoes());
         return consultaExistente;
     }
 
     @Override
     public Consulta toDomain(JpaConsultaEntity jpaEntity) {
-        System.out.println("mapper" + jpaEntity.getId());
         if (jpaEntity == null) {
             return null;
         }
@@ -97,6 +96,12 @@ public final class ConsultaMapper implements IConsultaMapper {
                 jpaEntity.getObservacoes(),
                 jpaEntity.getStatus()
         );
+    }
+
+    @Override
+    public FiltroBuscaConsulta toFiltroConsulta(ConsultaFiltroRequestDTO dto) {
+        var periodo = new PeriodoConsultas(dto.inicio(), dto.fim());
+        return new FiltroBuscaConsulta(dto.medicoId(), periodo);
     }
 
     @Override
@@ -119,13 +124,6 @@ public final class ConsultaMapper implements IConsultaMapper {
 
         return consultaExistente;
     }
-
-    @Override
-    public FiltroConsulta toFiltroConsulta(ConsultaFiltroRequestDTO dto) {
-        var periodo = new PeriodoConsulta(dto.inicio(), dto.fim());
-        return new FiltroConsulta(dto.medicoId(), periodo);
-    }
-
     @Override
     public ConsultaResponseGraphqlDTO toConsultaGraphqlDTO(Consulta consulta) {
         if (consulta == null){
@@ -145,4 +143,5 @@ public final class ConsultaMapper implements IConsultaMapper {
         );
     }
 }
+
 

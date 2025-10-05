@@ -27,9 +27,10 @@ public class AtualizarConsultaUseCaseImpl implements AtualizarConsultaUseCase {
     public ConsultaResponseDTO executar(UUID id, AtualizaConsultaDTO atualizaConsultaDTO) {
         Consulta consultaExistente = consultaGateway.buscarPorId(id)
                 .orElseThrow(() -> new ConsultaNaoEncontradaException("Consulta com ID " + id + " nao encontrada."));
-        Consulta consultaParaValidar = consultaMapper.toDomain(atualizaConsultaDTO, consultaExistente);
-        consultaValidators.forEach(validator -> validator.validar(consultaParaValidar));
-        Consulta consultaParaSalvar = consultaGateway.atualizar(consultaParaValidar);
-        return consultaMapper.toResponseDTO(consultaParaSalvar);
+
+        Consulta consultaAtualizada = consultaMapper.toDomain(atualizaConsultaDTO, consultaExistente);
+        consultaValidators.forEach(validator -> validator.validar(consultaAtualizada));
+        Consulta consultaSalva = consultaGateway.atualizar(consultaAtualizada);
+        return consultaMapper.toResponseDTO(consultaSalva);
     }
 }

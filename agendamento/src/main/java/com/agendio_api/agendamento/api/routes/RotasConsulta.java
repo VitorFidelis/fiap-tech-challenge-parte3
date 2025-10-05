@@ -7,10 +7,9 @@ public class RotasConsulta {
 
     public static final String CONSULTA = "/consultas";
     public static final String ID = "/{id}";
-    private static final String CANCELAR = "/cancelar";
+    public static final String CANCELAR = ID + "/cancelar";
     public static final String TODAS = "/todas";
     public static final String CONSULTA_COM_ID = CONSULTA + ID;
-    public static final String CONSULTA_COM_ID_CANCELAR = CONSULTA_COM_ID + CANCELAR;
     public static final String POR_MEDICO = "/medicos/{idMedico}";
     public static final String POR_PACIENTE = "/pacientes/{idPaciente}";
     public static final String POR_ENFERMEIRO = "/enfermeiros/{idEnfermeiro}";

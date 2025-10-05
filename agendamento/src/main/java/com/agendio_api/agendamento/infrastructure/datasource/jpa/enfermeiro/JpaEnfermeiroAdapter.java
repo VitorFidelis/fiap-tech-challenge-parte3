@@ -67,19 +67,18 @@ public class JpaEnfermeiroAdapter implements EnfermeiroDataSource {
                 pageResult.getTotalPages()
         );
     }
-
-
     @Override
     public Enfermeiro atualizar(Enfermeiro enfermeiro) {
-        // Converte o domínio para entidade JPA
-        JpaEnfermeiroEntity entity = enfermeiroMapper.toJpaEnfermeiroEntity(enfermeiro);
+        JpaEnfermeiroEntity existente = repository.findById(enfermeiro.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Enfermeiro não encontrado"));
 
-        // Garante que "atualizadoEm" seja modificado
-        entity.setAtualizadoEm(LocalDateTime.now());
+        existente.setNome(enfermeiro.getNome());
+        existente.setEmail(enfermeiro.getEmail());
+        existente.setCoren(enfermeiro.getCoren());
+        existente.setAtivo(enfermeiro.isAtivo());
+        existente.setAtualizadoEm(LocalDateTime.now());
 
-        JpaEnfermeiroEntity atualizado = repository.save(entity);
-
-        // Converte de volta para domínio
+        JpaEnfermeiroEntity atualizado = repository.save(existente);
         return enfermeiroMapper.toDomain(atualizado);
     }
 
@@ -91,10 +90,26 @@ public class JpaEnfermeiroAdapter implements EnfermeiroDataSource {
         Enfermeiro enfermeiro = enfermeiroMapper.toDomain(entity);
 
         enfermeiro.desativar();
+        entity.setAtivo(enfermeiro.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
 
-        repository.save(enfermeiroMapper.toJpaEnfermeiroEntity(enfermeiro));
+        repository.save(entity);
 
     }
+
+    @Override
+    public Enfermeiro reativar(UUID id) {
+        JpaEnfermeiroEntity entity = repository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Enfermeiro não encontrado"));
+
+        Enfermeiro enfermeiro = enfermeiroMapper.toDomain(entity);
+        enfermeiro.reativar();
+        entity.setAtivo(enfermeiro.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
+        JpaEnfermeiroEntity atualizado = repository.save(entity);
+        return enfermeiroMapper.toDomain(atualizado);
+    }
+
 
     @Override
     public boolean estaAtivo(UUID id) {
@@ -105,19 +120,6 @@ public class JpaEnfermeiroAdapter implements EnfermeiroDataSource {
         return enfermeiro.isAtivo();
     }
 
-    @Override
-    public Enfermeiro reativar(UUID id) {
-
-        return repository.findById(id)
-                .map(enfermeiroMapper::toDomain)
-                .map(enfermeiro -> {
-                    enfermeiro.reativar();
-                    return repository.save(enfermeiroMapper.toJpaEnfermeiroEntity(enfermeiro));
-                })
-                .map(repository::save)
-                .map(enfermeiroMapper::toDomain)
-                .orElseThrow(() -> new UsuarioNaoEncontradoException("Enfermeiro não encontrado"));
-    }
 
     @Override
     public Optional<Enfermeiro> buscarPorEmail(String email) {

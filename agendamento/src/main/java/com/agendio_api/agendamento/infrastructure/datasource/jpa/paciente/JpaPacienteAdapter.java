@@ -52,9 +52,14 @@ public class JpaPacienteAdapter implements PacienteDataSource {
 
     @Override
     public Paciente atualizar(Paciente paciente) {
-        JpaPacienteEntity entity = pacienteMapper.toJpaPacienteEntity(paciente);
-        entity.setAtualizadoEm(LocalDateTime.now());
-        JpaPacienteEntity atualizado = repository.save(entity);
+        JpaPacienteEntity existente = repository.findById(paciente.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Paciente nao encontrado"));
+        existente.setNome(paciente.getNome());
+        existente.setEmail(paciente.getEmail());
+        existente.setDataNascimento(paciente.getDataNascimento());
+        existente.setAtivo(paciente.isAtivo());
+        existente.setAtualizadoEm(LocalDateTime.now());
+        JpaPacienteEntity atualizado = repository.save(existente);
         return pacienteMapper.toDomain(atualizado);
     }
 
@@ -64,21 +69,25 @@ public class JpaPacienteAdapter implements PacienteDataSource {
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Paciente nao encontrado"));
         Paciente paciente = pacienteMapper.toDomain(entity);
         paciente.desativar();
-        repository.save(pacienteMapper.toJpaPacienteEntity(paciente));
+        entity.setAtivo(paciente.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
+        repository.save(entity);
     }
 
     @Override
     public Paciente reativar(UUID id) {
-        return repository.findById(id)
-                .map(pacienteMapper::toDomain)
-                .map(paciente -> {
-                    paciente.reativar();
-                    return pacienteMapper.toJpaPacienteEntity(paciente);
-                })
-                .map(repository::save)
-                .map(pacienteMapper::toDomain)
-                .orElseThrow(() ->
-                        new UsuarioNaoEncontradoException("Paciente nao encontrado"));
+        JpaPacienteEntity entity = repository.findById(id)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Paciente não encontrado"));
+
+        Paciente paciente = pacienteMapper.toDomain(entity);
+
+        paciente.reativar();
+
+        entity.setAtivo(paciente.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
+
+        JpaPacienteEntity atualizado = repository.save(entity);
+        return pacienteMapper.toDomain(atualizado);
 
     }
 

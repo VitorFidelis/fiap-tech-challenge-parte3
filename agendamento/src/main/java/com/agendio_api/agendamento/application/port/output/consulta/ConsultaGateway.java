@@ -5,8 +5,9 @@ import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedReque
 import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedResult;
 import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,20 +47,9 @@ public interface ConsultaGateway {
 
     PaginatedResult<Consulta> listarPorMedico(UsuarioIdFiltroPaginadoRequestDTO dto);
 
-//    /**
-//     * Lista consultas de um médico em um período, com paginação.
-//     *
-//     * @param requestDTO Filtros da busca (id do médico, período, etc.)
-//     * @param paginacao  Parâmetros de paginação (página, tamanho, ordenação)
-//     * @return Lista paginada de consultas do médico no período
-//     */
-//    PaginatedResult<Consulta> listarPorMedicoEPeriodoComDTO(
-//            ConsultaFiltroRequestDTO requestDTO,
-//            PaginatedRequestDTO paginacao
-//    );
 
     PaginatedResult<Consulta> listarPorMedicoEPeriodo(
-            FiltroConsulta filtro,
+            FiltroBuscaConsulta filtro,
             PaginatedRequestDTO paginacao
     );
 
@@ -95,7 +85,7 @@ public interface ConsultaGateway {
      * @param fim    Data/hora final
      * @return Lista de consultas no período
      */
-    PaginatedResult<Consulta> listarPorPeriodo(UUID medicoId, LocalDateTime inicio, LocalDateTime fim, PaginatedRequestDTO paginacao);
+    PaginatedResult<Consulta> listarPorPeriodo(UUID medicoId, LocalDate inicio, LocalDate fim, PaginatedRequestDTO paginacao);
 
     /**
      * Verifica se o paciente já possui consulta agendada no período.

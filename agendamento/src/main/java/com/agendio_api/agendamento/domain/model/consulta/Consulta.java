@@ -19,7 +19,6 @@ public class Consulta extends BaseEntity {
     private StatusConsulta status;
     private String observacoes;
 
-
     private Consulta(
             UUID id,
             UUID medicoId,
@@ -30,7 +29,7 @@ public class Consulta extends BaseEntity {
             StatusConsulta status) {
 
         super();
-
+        this.id = id;
         this.medicoId = Objects.requireNonNull(medicoId);
         this.enfermeiroId = Objects.requireNonNull(enfermeiroId);
         this.pacienteId = Objects.requireNonNull(pacienteId);
@@ -98,12 +97,14 @@ public class Consulta extends BaseEntity {
         touch();
     }
 
-    public void cancelar(String motivoCancelamento) {
+    public Consulta cancelar(String motivoCancelamento) {
         if (this.status == StatusConsulta.AGENDADA) {
             this.status = StatusConsulta.CANCELADA;
             this.setObservacoes("Consulta cancelada: " + motivoCancelamento);
             this.desativar();
+            this.touch();
         }
+        return this;
     }
 
     public void concluir() {
@@ -111,6 +112,21 @@ public class Consulta extends BaseEntity {
             this.status = StatusConsulta.REALIZADA;
             touch();
         }
+    }
+
+    public Consulta atualizar(Consulta consulta) {
+        this.horarioSolicitado = consulta.getHorarioSolicitado();
+        this.observacoes = consulta.getObservacoes();
+        this.status = consulta.getStatus();
+        return new Consulta(
+                this.id,
+                this.medicoId,
+                this.enfermeiroId,
+                this.pacienteId,
+                this.horarioSolicitado,
+                this.observacoes,
+                this.status
+        );
     }
 
 }
