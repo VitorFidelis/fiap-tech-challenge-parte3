@@ -2,8 +2,8 @@ package com.agendio_api.agendamento.domain.model.valueobject;
 
 import java.time.LocalDateTime;
 
-public record PeriodoConsulta(LocalDateTime inicio, LocalDateTime fim) {
-    public PeriodoConsulta {
+public record HorarioConsulta(LocalDateTime inicio, LocalDateTime fim) {
+    public HorarioConsulta {
         if (inicio == null || fim == null) {
             throw new IllegalArgumentException("O início e fim do período não podem ser nulos");
         }
@@ -16,7 +16,7 @@ public record PeriodoConsulta(LocalDateTime inicio, LocalDateTime fim) {
         return !dataHora.isBefore(inicio) && !dataHora.isAfter(fim);
     }
 
-    public boolean sobrepoe(PeriodoConsulta outroPeriodo) {
+    public boolean sobrepoe(HorarioConsulta outroPeriodo) {
         return inicio.isBefore(outroPeriodo.fim) && fim.isAfter(outroPeriodo.inicio);
     }
 }

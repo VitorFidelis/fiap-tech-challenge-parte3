@@ -6,11 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public record AtualizaConsultaDTO(
-        @NotNull
-        UUID id,
 
         @Future(message = "A data da consulta deve ser futura")
         LocalDateTime horarioSolicitado,

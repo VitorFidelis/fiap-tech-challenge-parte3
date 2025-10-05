@@ -21,7 +21,7 @@ public interface JpaConsultaRepository extends JpaRepository<JpaConsultaEntity, 
 
     Page<JpaConsultaEntity> findByPacienteIdAndAtivoTrue(UUID pacienteId, Pageable pageable);
 
-    Page<JpaConsultaEntity> findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(UUID medicoId, LocalDateTime inicio, LocalDateTime fim, Pageable pageable, StatusConsulta status);
+    Page<JpaConsultaEntity> findByMedicoIdAndHorarioSolicitadoBetweenAndStatus(UUID medicoId, LocalDateTime inicio, LocalDateTime fim, StatusConsulta status, Pageable pageable);
 
     Page<JpaConsultaEntity> findByMedicoIdAndAtivoTrue(UUID medicoId, Pageable pageable);
 

@@ -6,7 +6,7 @@ import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedReque
 import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedResult;
 import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,20 +44,9 @@ public interface ConsultaDataSource {
      */
     boolean existeConsultaNoHorario(UUID medicoId, LocalDateTime dataHora);
 
-//    /**
-//     * Lista as consultas de um médico em um período específico com paginação.
-//     *
-//     * @param filtro    Filtros para a busca (ID do médico, datas, etc.)
-//     * @param paginacao Parâmetros de paginação
-//     * @return Lista paginada de consultas
-//     */
-//    PaginatedResult<Consulta> listarPorMedicoEPeriodoComRequestDTO(
-//            ConsultaFiltroRequestDTO filtro,
-//            PaginatedRequestDTO paginacao
-//    );
 
     PaginatedResult<Consulta> listarPorMedicoEPeriodo(
-            FiltroConsulta filtro,
+            FiltroBuscaConsulta filtro,
             PaginatedRequestDTO paginacao
     );
 

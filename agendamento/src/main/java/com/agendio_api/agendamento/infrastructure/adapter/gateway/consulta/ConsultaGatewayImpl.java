@@ -8,9 +8,10 @@ import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroP
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaDataSource;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaGateway;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
 import com.agendio_api.agendamento.infrastructure.exception.GatewayException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,7 @@ public class ConsultaGatewayImpl implements ConsultaGateway {
 
     public ConsultaGatewayImpl(ConsultaDataSource dataSource) {
         this.dataSource = Objects.requireNonNull(dataSource, "DataSource não pode ser nulo");
+
     }
 
     @Override
@@ -50,14 +52,9 @@ public class ConsultaGatewayImpl implements ConsultaGateway {
     }
 
     @Override
-    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(FiltroConsulta filtro, PaginatedRequestDTO paginacao) {
+    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(FiltroBuscaConsulta filtro, PaginatedRequestDTO paginacao) {
         return dataSource.listarPorMedicoEPeriodo(filtro, paginacao);
     }
-
-//    @Override
-//    public PaginatedResult<Consulta> listarPorMedicoEPeriodo(ConsultaFiltroRequestDTO requestDTO, PaginatedRequestDTO paginacao) {
-//        return dataSource.listarPorMedicoEPeriodo(requestDTO, paginacao);
-//    }
 
     @Override
     public boolean existeConsultaNoHorario(UUID medicoId, LocalDateTime dataHora) {
@@ -75,7 +72,7 @@ public class ConsultaGatewayImpl implements ConsultaGateway {
     }
 
     @Override
-    public PaginatedResult<Consulta> listarPorPeriodo(UUID medicoId, LocalDateTime inicio, LocalDateTime fim, PaginatedRequestDTO paginacao) {
+    public PaginatedResult<Consulta> listarPorPeriodo(UUID medicoId, LocalDate inicio, LocalDate fim, PaginatedRequestDTO paginacao) {
 
         return dataSource.listarPorPeriodo(new ConsultaFiltroRequestDTO(medicoId, inicio, fim), paginacao);
     }

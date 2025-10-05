@@ -9,8 +9,8 @@ import com.agendio_api.agendamento.application.port.input.consulta.usecase.Encon
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaGateway;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.consulta.FiltroConsulta;
-import com.agendio_api.agendamento.domain.model.valueobject.PeriodoConsulta;
+import com.agendio_api.agendamento.domain.model.consulta.FiltroBuscaConsulta;
+import com.agendio_api.agendamento.domain.model.valueobject.PeriodoConsultas;
 
 import java.util.List;
 
@@ -26,14 +26,11 @@ public class EncontrarConsultasPorMedicoEPeriodoUseCaseImpl implements Encontrar
 
     @Override
     public PaginatedResponseDTO<ConsultaResponseDTO> executar(ConsultaFiltroRequestDTO requestDTO, PaginatedRequestDTO paginacao) {
-        // Cria os Value Objects
-        var periodo = new PeriodoConsulta(requestDTO.inicio(), requestDTO.fim());
-        var filtro = new FiltroConsulta(requestDTO.medicoId(), periodo);
+        var periodo = new PeriodoConsultas(requestDTO.inicio(), requestDTO.fim());
+        var filtro = new FiltroBuscaConsulta(requestDTO.medicoId(), periodo);
 
-        // Usa o gateway com o filtro de domínio (não o DTO)
         PaginatedResult<Consulta> consultasPaginadas = consultaGateway.listarPorMedicoEPeriodo(filtro, paginacao);
 
-        // Mapeia resultado para DTO de saída
         List<ConsultaResponseDTO> consultas = consultasPaginadas.content()
                 .stream()
                 .map(consultaMapper::toResponseDTO)

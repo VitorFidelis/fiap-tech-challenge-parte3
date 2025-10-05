@@ -71,9 +71,18 @@ public class JpaMedicoAdapter implements MedicoDataSource {
 
     @Override
     public Medico atualizar(Medico medico) {
-        JpaMedicoEntity entity = medicoMapper.toJpaMedicoEntity(medico);
-        entity.setAtualizadoEm(LocalDateTime.now());
-        JpaMedicoEntity atualizado = repository.save(entity);
+        JpaMedicoEntity existente = repository.findById(medico.getId())
+                .orElseThrow(() -> new UsuarioNaoEncontradoException("Médico não encontrado"));
+
+        existente.setNome(medico.getNome());
+        existente.setEmail(medico.getEmail());
+        existente.setSenha(medico.getSenha());
+        existente.setCrm(medico.getCrm());
+        existente.setEspecialidade(medico.getEspecialidade());
+        existente.setAtivo(medico.isAtivo());
+        existente.setAtualizadoEm(LocalDateTime.now());
+
+        JpaMedicoEntity atualizado = repository.save(existente);
         return medicoMapper.toDomainFromJPA(atualizado);
     }
 
@@ -83,22 +92,25 @@ public class JpaMedicoAdapter implements MedicoDataSource {
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Medico nao encontrado"));
         Medico medico = medicoMapper.toDomainFromJPA(entity);
         medico.desativar();
-        entity = medicoMapper.toJpaMedicoEntity(medico);
+        entity.setAtivo(medico.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
         repository.save(entity);
     }
 
     @Override
     public Medico reativar(UUID id) {
-        return repository.findById(id)
-                .map(medicoMapper::toDomainFromJPA)
-                .map(medico -> {
-                    medico.reativar();
-                    return medicoMapper.toJpaMedicoEntity(medico);
-                })
-                .map(repository::save)
-                .map(medicoMapper::toDomainFromJPA)
+        JpaMedicoEntity entity = repository.findById(id)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException("Medico nao encontrado"));
+
+        Medico medico = medicoMapper.toDomainFromJPA(entity);
+        medico.reativar();
+        entity.setAtivo(medico.isAtivo());
+        entity.setAtualizadoEm(LocalDateTime.now());
+        JpaMedicoEntity atualizado = repository.save(entity);
+        return medicoMapper.toDomainFromJPA(atualizado);
     }
+
+
 
     @Override
     public boolean estaAtivo(UUID id) {
