@@ -35,6 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
+            if (!StringUtils.hasText(jwt)) {
+                logger.warn("Falha Crítica: Nenhum token JWT encontrado no cabeçalho Authorization.");
+            }
+
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String userEmail = tokenProvider.getUserEmailFromJWT(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
@@ -47,6 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else if (StringUtils.hasText(jwt) && !tokenProvider.validateToken(jwt)) {
+                logger.error("Falha Crítica: Token fornecido, mas a validação (validateToken) falhou (Chave/Expiração).");
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
