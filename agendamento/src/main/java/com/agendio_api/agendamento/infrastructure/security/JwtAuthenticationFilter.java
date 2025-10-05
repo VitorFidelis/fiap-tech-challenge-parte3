@@ -1,5 +1,7 @@
 package com.agendio_api.agendamento.infrastructure.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,16 +25,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        logger.info("Executando JwtAuthenticationFilter para URI: {}", request.getRequestURI());
         try {
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 String userEmail = tokenProvider.getUserEmailFromJWT(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+                logger.info("Usuário autenticado: {} com Roles: {}", userEmail, userDetails.getAuthorities());
 
                 var authentication =
                         new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(

@@ -15,6 +15,7 @@ import com.agendio_api.agendamento.domain.validator.ConsultaValidator;
 import com.agendio_api.agendamento.infrastructure.adapter.gateway.consulta.ConsultaGatewayImpl;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta.JpaConsultaAdapter;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta.JpaConsultaRepository;
+import com.agendio_api.agendamento.infrastructure.security.AuthenticatedUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -100,7 +101,8 @@ public class ConsultaBeanConfig {
                                                                     EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase,
                                                                     AgendarConsultaUseCase agendarConsultaUseCase,
                                                                     ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase,
-                                                                    AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase) {
+                                                                    AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase,
+                                                                    AuthenticatedUserService authenticatedUserService) {
         return new ConsultaControllerInputPortImpl(agendarConsultaUseCase,
                 atualizarConsultaUseCase,
                 cancelarConsultaUseCase,
@@ -111,6 +113,7 @@ public class ConsultaBeanConfig {
                 encontrarConsultasPorPacienteUseCase,
                 encontrarTodasConsultasUseCase,
                 listarConsultasGraphqlUseCase,
-                atualizarConsultaGraphqlUseCase);
+                atualizarConsultaGraphqlUseCase,
+                authenticatedUserService);
     }
 }
