@@ -1,4 +1,4 @@
-scalar DateTime
+scalar LocalDateTime
 
 enum StatusConsulta {
     AGENDADA
@@ -11,11 +11,11 @@ type Consulta {
     medicoId: ID!
     enfermeiroId: ID!
     pacienteId: ID!
-    horarioSolicitado: DateTime!
+    horarioSolicitado: LocalDateTime!
     status: StatusConsulta
     observacoes: String
-    criadoEm: DateTime
-    atualizadoEm: DateTime
+    criadoEm: LocalDateTime
+    atualizadoEm: LocalDateTime
 }
 
 input ListarConsultaInput {
@@ -23,21 +23,21 @@ input ListarConsultaInput {
     medicoId: ID
     enfermeiroId: ID
     status: StatusConsulta
-    dataMin: DateTime
-    dataMax: DateTime
+    dataMin: LocalDateTime
+    dataMax: LocalDateTime
 }
 
 input AgendarConsultaInput {
     medicoId: ID!
     enfermeiroId: ID!
     pacienteId: ID!
-    horarioSolicitado: DateTime!
+    horarioSolicitado: LocalDateTime!
     observacoes: String
 }
 
 input AtualizarConsultaInput {
     id: ID!
-    horarioSolicitado: String
+    horarioSolicitado: LocalDateTime
     status: StatusConsulta
     observacoes: String
 }

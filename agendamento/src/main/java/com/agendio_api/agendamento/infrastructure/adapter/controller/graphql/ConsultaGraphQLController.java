@@ -21,12 +21,12 @@ public class ConsultaGraphQLController {
     }
 
     @QueryMapping
-    public List<ConsultaResponseGraphqlDTO> listarPorFiltro(@Argument ListarConsultaGraphqlDTO filtros) {
+    public List<ConsultaResponseGraphqlDTO> listarConsultas(@Argument("input") ListarConsultaGraphqlDTO filtros) {
         return consultaControllerInputPort.listarPorFiltros(filtros);
     }
 
     @MutationMapping
-    public ConsultaResponseGraphqlDTO atualizaConsulta(@Argument AtualizarConsultaGraphqlDTO input) {
+    public ConsultaResponseGraphqlDTO atualizarConsulta(@Argument("input") AtualizarConsultaGraphqlDTO input) {
         input.validar();
         return consultaControllerInputPort.atualizarGraphql(input);
     }
