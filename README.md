@@ -1,106 +1,117 @@
-# fiap-tech-challenge-parte3
-Desenvolvimento de uma API RESTful que garante o agendamento eficaz de consultas, o gerenciamento do histórico de pacientes e o envio de lembretes automáticos para garantir a presença dos pacientes nas consultas. Este sistema vai ser acessível a diferentes tipos de usuários (médicos, enfermeiros e pacientes), com acesso controlado e funcionalidades específicas para cada perfil.
+# 🩺 fiap-tech-challenge-parte3
 
----
+## Visão Geral do Projeto
 
-## 📔​agendio-api
+Este projeto consiste no **Desenvolvimento de uma API RESTful** focada em soluções de agendamento e gestão de pacientes para um ambiente hospitalar. O sistema garante o **agendamento eficaz de consultas**, o **gerenciamento do histórico de pacientes** e o **envio de lembretes automáticos** para garantir a presença dos pacientes.
+
+O sistema é construído de forma **modular e escalável**, utilizando comunicação assíncrona para o envio de notificações e acesso controlado a diferentes perfis de usuários (médicos, enfermeiros e pacientes).
+
+-----
+
+## 🎯 Objetivo e Solução
 
 ### Problema:
 
-Em um ambiente hospitalar, é essencial contar com sistemas que
-garantam o agendamento eficaz de consultas, o gerenciamento do histórico de
-pacientes e o envio de lembretes automáticos para garantir a presença dos
-pacientes nas consultas. Este sistema deve ser acessível a diferentes tipos de
-usuários (médicos, enfermeiros e pacientes), com acesso controlado e
-funcionalidades específicas para cada perfil.
+Em um ambiente hospitalar, é essencial garantir o **agendamento eficaz de consultas**, o **gerenciamento do histórico de pacientes** e o **envio de lembretes automáticos**. O sistema deve ser acessível a diferentes tipos de usuários (médicos, enfermeiros e pacientes), com **acesso controlado** e funcionalidades específicas para cada perfil.
 
-### Objetivo:
+### Solução (Objetivo):
 
-O objetivo é desenvolver um backend simplificado e modular, com foco
-em segurança e comunicação assíncrona, garantindo que o sistema seja
-escalável, seguro e que utilize boas práticas de autenticação, autorização e
-comunicação entre serviços.
+O objetivo é desenvolver um *backend* simplificado e modular, com foco em segurança e comunicação assíncrona. Isso garante que o sistema seja **escalável**, **seguro** e utilize boas práticas de **autenticação (JWT)**, **autorização** e **comunicação entre serviços**.
 
----
+-----
 
-## 👨‍🔧​separação em mais de um serviço
+## 👨‍🔧 Arquitetura e Microsserviços
 
-### Serviço de agendamento:
+A aplicação é dividida em serviços para garantir a **modularidade** e a **comunicação assíncrona**:
 
-responsável pela criação e edição das consultas; realizado em REST e GraphQL.
+### 1\. Serviço de Agendamento (`agendio-api`)
 
-### Serviço de notificações:
+  * **Função:** Responsável pela **criação e edição das consultas** e pelo gerenciamento do histórico de pacientes.
+  * **Endpoints:** Implementado em **REST** (para operações padrão) e **GraphQL** (para consultas de dados complexas).
+  * **Persistência:** Utiliza **PostgreSQL** através do Spring Data JPA.
 
-envia lembretes automáticos aos pacientes sobre consultas futuras.
+### 2\. Serviço de Notificações
 
----
+  * **Função:** Responsável exclusivamente por enviar **lembretes automáticos** aos pacientes sobre consultas futuras.
+  * **Comunicação:** Utiliza **RabbitMQ** para receber de forma assíncrona os eventos de agendamento e processar o envio dos lembretes.
 
-## 📝​Tecnologias
+-----
 
-- Java 21+
-- Spring Boot 3
-- Maven
-- Spring Security + JWT
-- PostgreSQL
-- RabbitMQ
-- GraphQL
-- Spring Data JPA
-- SpringDoc / Swagger
-- Docker
-- Docker Compose
+## 📝 Tecnologias Utilizadas
 
----
+| Categoria | Tecnologia | Justificativa |
+| :--- | :--- | :--- |
+| **Backend** | **Java 21+** e **Spring Boot 3**  | Base robusta e madura para o desenvolvimento da API. |
+| **Persistência** | **PostgreSQL**  e **Spring Data JPA**  | Banco de dados relacional para garantir a **integridade e consistência** dos dados de agendamento e histórico. |
+| **Mensageria** | **RabbitMQ**  | Permite o envio **assíncrono** dos lembretes, garantindo que o serviço principal de agendamento não seja travado. |
+| **Segurança** | **Spring Security + JWT** | Implementação de autenticação e autorização seguras para os diferentes perfis (médicos, enfermeiros e pacientes). |
+| **API/Query** | **REST**, **GraphQL**  e **SpringDoc / Swagger** | Oferece flexibilidade e uma documentação interativa para os *endpoints*. |
+| **Infraestrutura** | **Docker** e **Docker Compose** | Facilita a instalação e a execução de todos os serviços (API, PostgreSQL e RabbitMQ) em um único comando. |
 
-## ▶️​Como executar
+-----
 
-primeiro instale todas as dependencias necessarias:
+## ▶️ Como Executar o Projeto
 
-```shell
-  mvn clean install
-```
-### Variaveis de Ambiente
+Siga os passos abaixo para subir a aplicação completa em seu ambiente local usando Docker Compose:
 
-identifique o arquivo ***.env.example*** e faça uma copia renomeando para ***.env***.
+### 1\. Configuração de Variáveis de Ambiente
 
-Preencha esse arquivo **.env** criado, com as credenciais desejadas (aleatório).
+Crie o arquivo de variáveis de ambiente com base no modelo:
 
-```Text
+  * Identifique o arquivo ***.env.example*** e faça uma cópia renomeando-a para **.env**.
+  * Preencha o novo arquivo **.env** com as credenciais que deseja usar. O Docker Compose usará essas credenciais para configurar o PostgreSQL e o RabbitMQ:
+
+<!-- end list -->
+
+```text
 # Configuração PostgreSQL (todos os serviços usam)
-POSTGRES_USER=info_user_name
-POSTGRES_PASSWORD=info_password
+POSTGRES_USER=info_user_name 
+POSTGRES_PASSWORD=info_password 
 
 # Configuração RabbitMQ
-RABBITMQ_USER=info_user_name
-RABBITMQ_PASSWORD=info_password
-```
-Com essas informações preenchidas o docker-compose.yml consegue criar as bases de dados no postgreSQL
-
-### Execute com Docker compose
-
-````Shell
-  docker compose up
-````
-
-Depois do comando a cima, podemos validar se os containers estão em execução:
-
-```Shell
-  docker compose ps
+RABBITMQ_USER=info_user_name 
+RABBITMQ_PASSWORD=info_password 
 ```
 
-## Como testar:
-Há uma coleção do postman na pasta Resource, para teste dos endpoints em REST. Para os endpoints em GraphQL, é preciso utilizar o link:
+### 2\. Inicialização dos Containers
+
+Use o Docker Compose para criar e iniciar todos os serviços (banco de dados, *message broker* e a API):
+
+```shell
+docker compose up
+```
+
+Após a execução, valide se todos os *containers* estão ativos:
+
+```shell
+docker compose ps
+```
+
+*Opcional: Se desejar reconstruir a imagem da API, execute:* `mvn clean install`.
+
+-----
+
+## Como Testar a API
+
+### Teste da API REST (POSTMAN)
+
+Para testar os *endpoints* em REST, utilize a **coleção do Postman** fornecida na pasta `Resource` do projeto.
+
+### Teste da API GraphQL
+
+Para consultar os *endpoints* implementados em **GraphQL**, acesse o *playground* do GraphiQL no seu navegador:
 
 ```
-http://localhost:8080/graphiql?path=/graphql
+http://localhost:8080/graphiql?path=/graphql 
 ```
 
-## 🧩​Time de Desenvolvimento
+-----
 
-- Eric Monné: [GitHub](https://github.com/ericmonne) |
+## 🧩 Time de Desenvolvimento
 
-- Lucas Vinicius: [GitHub](https://github.com/lcvinicius) |
+O projeto foi desenvolvido pelo seguinte time:
 
-- Ana Cortez: [GitHub](https://github.com/anacarolcortez) |
-
-- Vitor Fidelis: [GitHub](https://github.com/VitorFidelis) |
-
+  * Eric Monné: [GitHub](https://github.com/ericmonne) 
+  * Lucas Vinicius: [GitHub](https://github.com/lcvinicius) 
+  * Ana Cortez: [GitHub](https://github.com/anacarolcortez) 
+  * Vitor Fidelis: [GitHub](https://github.com/VitorFidelis) 
