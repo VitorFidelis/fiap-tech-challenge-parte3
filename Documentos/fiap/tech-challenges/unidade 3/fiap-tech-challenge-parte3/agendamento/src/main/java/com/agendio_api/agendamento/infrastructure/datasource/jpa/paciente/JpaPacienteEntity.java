@@ -50,6 +50,7 @@ public class JpaPacienteEntity {
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
+    @Enumerated(EnumType.STRING)
     @Column(name= "role", nullable = false)
     private Role role;
 }

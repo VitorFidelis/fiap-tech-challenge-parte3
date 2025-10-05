@@ -1,6 +1,7 @@
 package com.agendio_api.agendamento.infrastructure.security;
 
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +11,11 @@ import java.util.Collections;
 import java.util.UUID;
 
 public class UserPrincipal implements UserDetails {
+    @Getter
     private UUID id;
     private String email;
     private String senha;
+    @Getter
     private String nome;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -37,14 +40,6 @@ public class UserPrincipal implements UserDetails {
                 usuario.getNome(),
                 authorities
         );
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     @Override

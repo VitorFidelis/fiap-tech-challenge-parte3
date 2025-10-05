@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.nio.channels.FileChannel;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,4 +17,6 @@ public interface JpaEnfermeiroRepository extends JpaRepository<JpaEnfermeiroEnti
     Page<JpaEnfermeiroEntity> findAllByAtivoTrue(Pageable pageable);
 
     Optional<JpaEnfermeiroEntity> findByIdAndAtivoTrue(UUID id);
+
+    Optional<JpaEnfermeiroEntity> findByEmail(String email);
 }

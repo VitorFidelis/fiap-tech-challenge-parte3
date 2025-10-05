@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.nio.channels.FileChannel;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,4 +22,6 @@ public interface JpaMedicoRepository extends JpaRepository<JpaMedicoEntity, UUID
     Optional<JpaMedicoEntity> findByCrmAndAtivoTrue(String crm);
 
     Page<JpaMedicoEntity> findAllByAtivoTrue(Pageable pageable);
+
+    Optional<JpaMedicoEntity> findByEmail(String email);
 }

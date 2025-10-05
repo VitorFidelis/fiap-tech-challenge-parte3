@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.domain.common.BaseEntity;
 import com.agendio_api.agendamento.domain.model.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchConnectionDetails;
 
 @Getter
 @Setter

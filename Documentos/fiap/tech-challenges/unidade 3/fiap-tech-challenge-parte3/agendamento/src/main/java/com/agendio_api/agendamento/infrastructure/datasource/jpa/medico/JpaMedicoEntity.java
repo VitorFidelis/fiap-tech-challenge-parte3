@@ -54,6 +54,7 @@ public class JpaMedicoEntity {
     @Column(nullable = false)
     private boolean ativo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name= "role", nullable = false)
     private Role role;
 
