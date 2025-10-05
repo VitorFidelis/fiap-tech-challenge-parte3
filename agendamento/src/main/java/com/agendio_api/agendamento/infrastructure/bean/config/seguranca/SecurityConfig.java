@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/medicos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/enfermeiros").permitAll()
 
-                        // Use hasAuthority em vez de hasRole
+                        //endpoints restritos
                         .requestMatchers(HttpMethod.GET, "/pacientes/todos").hasAnyAuthority("ROLE_MEDICO", "ROLE_ENFERMEIRO")
                         .requestMatchers("/pacientes/**").hasAnyAuthority("ROLE_PACIENTE", "ROLE_MEDICO", "ROLE_ENFERMEIRO")
                         .requestMatchers("/medicos/**").hasAuthority("ROLE_MEDICO")
@@ -48,6 +48,7 @@ public class SecurityConfig {
 
                         .anyRequest().authenticated()
                 );
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

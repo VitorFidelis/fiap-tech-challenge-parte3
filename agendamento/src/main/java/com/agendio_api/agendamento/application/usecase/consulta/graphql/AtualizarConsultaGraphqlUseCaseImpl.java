@@ -11,6 +11,8 @@ import com.agendio_api.agendamento.domain.model.usuario.Enfermeiro;
 import com.agendio_api.agendamento.domain.model.usuario.Medico;
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
 import com.agendio_api.agendamento.infrastructure.exception.AccessDeniedException;
+import com.agendio_api.agendamento.infrastructure.security.UserPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class AtualizarConsultaGraphqlUseCaseImpl implements AtualizarConsultaGraphqlUseCase {
 
@@ -23,20 +25,24 @@ public class AtualizarConsultaGraphqlUseCaseImpl implements AtualizarConsultaGra
     }
 
     @Override
-    public ConsultaResponseGraphqlDTO executar(AtualizarConsultaGraphqlDTO request, Usuario usuarioLogado) {
+    public ConsultaResponseGraphqlDTO executar(AtualizarConsultaGraphqlDTO request, UserPrincipal usuarioLogado) {
         Consulta consultaExistente = consultaGateway.buscarPorId(request.id())
                 .orElseThrow(() -> new ConsultaNaoEncontradaException("Consulta com ID " + request.id() + " nao encontrada."));
 
-        if (usuarioLogado instanceof Medico medico) {
-            if (!consultaExistente.getMedicoId().equals(medico.getId())) {
+        var roleMedico = new SimpleGrantedAuthority("ROLE_MEDICO");
+        var roleEnfermeiro = new SimpleGrantedAuthority("ROLE_ENFERMEIRO");
+        var authorities = usuarioLogado.getAuthorities();
+
+        if (authorities.contains(roleMedico)) {
+            if (!consultaExistente.getMedicoId().equals(usuarioLogado.getId())) {
                 throw new AccessDeniedException("Médico não autorizado para esta consulta");
             }
-        } else if (usuarioLogado instanceof Enfermeiro enfermeiro) {
-            if (!consultaExistente.getEnfermeiroId().equals(enfermeiro.getId())) {
+        } else if (authorities.contains(roleEnfermeiro)) {
+            if (!consultaExistente.getEnfermeiroId().equals(usuarioLogado.getId())) {
                 throw new AccessDeniedException("Enfermeiro não autorizado para esta consulta");
             }
         } else {
-            throw new AccessDeniedException("Usuário não autorizado");
+            throw new AccessDeniedException("Usuário não autorizado a atualizar consultas");
         }
 
         Consulta consultaParaValidar = consultaMapper.toDomain(request, consultaExistente);

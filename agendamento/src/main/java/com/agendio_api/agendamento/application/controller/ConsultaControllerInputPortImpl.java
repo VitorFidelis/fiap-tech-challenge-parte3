@@ -15,6 +15,8 @@ import com.agendio_api.agendamento.application.port.input.consulta.usecase.*;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.AtualizarConsultaGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.ListarConsultasGraphqlUseCase;
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
+import com.agendio_api.agendamento.infrastructure.security.AuthenticatedUserService;
+import com.agendio_api.agendamento.infrastructure.security.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +37,9 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
     private final EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase;
     private final ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase;
     private final AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase;
+    private final AuthenticatedUserService authenticatedUserService;
 
-    //injetar serviço que pega o usuário autenticado
-
-    public ConsultaControllerInputPortImpl(AgendarConsultaUseCase agendarConsultaUseCase, AtualizarConsultaUseCase atualizarConsultaUseCase, CancelarConsultaUseCase cancelarConsultaUseCase, EncontrarConsultaPorIdUseCase encontrarConsultaUseCase, EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase, EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase, EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase, EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase, EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase, ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase, AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase) {
+    public ConsultaControllerInputPortImpl(AgendarConsultaUseCase agendarConsultaUseCase, AtualizarConsultaUseCase atualizarConsultaUseCase, CancelarConsultaUseCase cancelarConsultaUseCase, EncontrarConsultaPorIdUseCase encontrarConsultaUseCase, EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase, EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase, EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase, EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase, EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase, ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase, AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase, AuthenticatedUserService authenticatedUserService) {
         this.agendarConsultaUseCase = agendarConsultaUseCase;
         this.atualizarConsultaUseCase = atualizarConsultaUseCase;
         this.cancelarConsultaUseCase = cancelarConsultaUseCase;
@@ -50,6 +51,7 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
         this.encontrarTodasConsultasUseCase = encontrarTodasConsultasUseCase;
         this.listarConsultasGraphqlUseCase = listarConsultasGraphqlUseCase;
         this.atualizarConsultaGraphqlUseCase = atualizarConsultaGraphqlUseCase;
+        this.authenticatedUserService = authenticatedUserService;
     }
 
     @Override
@@ -109,14 +111,14 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
     @Override
     public List<ConsultaResponseGraphqlDTO> listarPorFiltros(ListarConsultaGraphqlDTO filtro) {
         logger.info("Listando consultas flexíveis do graphql: {}", filtro);
-        Usuario usuarioLogado = null;
+        UserPrincipal usuarioLogado = authenticatedUserService.getCurrentUserPrincipal();
         return listarConsultasGraphqlUseCase.executar(filtro, usuarioLogado);
     }
 
     @Override
     public ConsultaResponseGraphqlDTO atualizarGraphql(AtualizarConsultaGraphqlDTO request) {
         logger.info("Atualizando consulta id: {}", request.id());
-        Usuario usuarioLogado = null;
+        UserPrincipal usuarioLogado = authenticatedUserService.getCurrentUserPrincipal();
         return atualizarConsultaGraphqlUseCase.executar(request, usuarioLogado);
     }
 }

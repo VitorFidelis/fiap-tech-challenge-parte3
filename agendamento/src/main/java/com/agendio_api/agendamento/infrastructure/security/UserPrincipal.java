@@ -22,7 +22,7 @@ public class UserPrincipal implements UserDetails {
     private String nome;
 
     @Getter
-    private String role; // <-- aqui entra
+    private String role;
 
     private Collection<? extends GrantedAuthority> authorities;
 

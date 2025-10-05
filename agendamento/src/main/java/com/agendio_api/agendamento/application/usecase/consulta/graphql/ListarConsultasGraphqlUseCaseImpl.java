@@ -11,6 +11,8 @@ import com.agendio_api.agendamento.domain.model.usuario.Medico;
 import com.agendio_api.agendamento.domain.model.usuario.Paciente;
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
 import com.agendio_api.agendamento.infrastructure.exception.AccessDeniedException;
+import com.agendio_api.agendamento.infrastructure.security.UserPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ListarConsultasGraphqlUseCaseImpl implements ListarConsultasGraphql
     }
 
     @Override
-    public List<ConsultaResponseGraphqlDTO> executar(ListarConsultaGraphqlDTO filtro, Usuario usuarioLogado) {
+    public List<ConsultaResponseGraphqlDTO> executar(ListarConsultaGraphqlDTO filtro, UserPrincipal usuarioLogado) {
         aplicarEscopoUsuario(filtro, usuarioLogado);
 
         List<Consulta> consulta = consultaGateway.listagemConsultaGraphql(filtro);
@@ -36,13 +38,19 @@ public class ListarConsultasGraphqlUseCaseImpl implements ListarConsultasGraphql
                 .toList();
     }
 
-    private void aplicarEscopoUsuario(ListarConsultaGraphqlDTO filtro, Usuario usuario) {
-        if (usuario instanceof Medico medico) {
-            filtro.setMedicoId(medico.getId());
-        } else if (usuario instanceof Enfermeiro enfermeiro) {
-            filtro.setEnfermeiroId(enfermeiro.getId());
-        } else if (usuario instanceof Paciente paciente) {
-            filtro.setPacienteId(paciente.getId());
+    private void aplicarEscopoUsuario(ListarConsultaGraphqlDTO filtro, UserPrincipal usuario) {
+
+        var roleMedico = new SimpleGrantedAuthority("ROLE_MEDICO");
+        var roleEnfermeiro = new SimpleGrantedAuthority("ROLE_ENFERMEIRO");
+        var rolePaciente = new SimpleGrantedAuthority("ROLE_PACIENTE");
+        var authorities = usuario.getAuthorities();
+
+        if (authorities.contains(roleMedico)) {
+            filtro.setMedicoId(usuario.getId());
+        } else if (authorities.contains(roleEnfermeiro)) {
+            filtro.setEnfermeiroId(usuario.getId());
+        } else if (authorities.contains(rolePaciente)) {
+            filtro.setPacienteId(usuario.getId());
         } else {
             throw new AccessDeniedException("Usuário não autorizado a consultar agendamentos");
         }
