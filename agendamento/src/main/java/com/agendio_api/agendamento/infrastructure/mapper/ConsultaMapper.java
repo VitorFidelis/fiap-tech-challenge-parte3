@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.consulta.AgendaConsultaD
 import com.agendio_api.agendamento.application.port.dto.consulta.AtualizaConsultaDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaResponseDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AgendarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AtualizarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
@@ -124,6 +125,17 @@ public final class ConsultaMapper implements IConsultaMapper {
 
         return consultaExistente;
     }
+
+    @Override
+    public Consulta toDomain(AgendarConsultaGraphqlDTO request) {
+        return Consulta.agendar(
+                request.medicoId(),
+                request.enfermeiroId(),
+                request.pacienteId(),
+                request.horarioSolicitado(),
+                request.observacoes());
+    }
+
     @Override
     public ConsultaResponseGraphqlDTO toConsultaGraphqlDTO(Consulta consulta) {
         if (consulta == null){

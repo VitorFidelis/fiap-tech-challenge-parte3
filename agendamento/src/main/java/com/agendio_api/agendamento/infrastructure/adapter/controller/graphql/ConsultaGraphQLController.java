@@ -1,5 +1,6 @@
 package com.agendio_api.agendamento.infrastructure.adapter.controller.graphql;
 
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AgendarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AtualizarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ListarConsultaGraphqlDTO;
@@ -29,5 +30,11 @@ public class ConsultaGraphQLController {
     public ConsultaResponseGraphqlDTO atualizarConsulta(@Argument("input") AtualizarConsultaGraphqlDTO input) {
         input.validar();
         return consultaControllerInputPort.atualizarGraphql(input);
+    }
+
+    @MutationMapping
+    public ConsultaResponseGraphqlDTO agendarConsulta(@Argument("input") AgendarConsultaGraphqlDTO input) {
+        input.validar();
+        return consultaControllerInputPort.agendarGraphql(input);
     }
 }

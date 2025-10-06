@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.consulta.AgendaConsultaD
 import com.agendio_api.agendamento.application.port.dto.consulta.AtualizaConsultaDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaResponseDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AgendarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AtualizarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ListarConsultaGraphqlDTO;
@@ -12,6 +13,7 @@ import com.agendio_api.agendamento.application.port.dto.paginated.PaginatedRespo
 import com.agendio_api.agendamento.application.port.dto.usuario.UsuarioIdFiltroPaginadoRequestDTO;
 import com.agendio_api.agendamento.application.port.input.consulta.controller.ConsultaControllerInputPort;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.*;
+import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.AgendarConsultaGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.AtualizarConsultaGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.ListarConsultasGraphqlUseCase;
 import com.agendio_api.agendamento.domain.model.usuario.Usuario;
@@ -37,9 +39,10 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
     private final EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase;
     private final ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase;
     private final AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase;
+    private final AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase;
     private final AuthenticatedUserService authenticatedUserService;
 
-    public ConsultaControllerInputPortImpl(AgendarConsultaUseCase agendarConsultaUseCase, AtualizarConsultaUseCase atualizarConsultaUseCase, CancelarConsultaUseCase cancelarConsultaUseCase, EncontrarConsultaPorIdUseCase encontrarConsultaUseCase, EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase, EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase, EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase, EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase, EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase, ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase, AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase, AuthenticatedUserService authenticatedUserService) {
+    public ConsultaControllerInputPortImpl(AgendarConsultaUseCase agendarConsultaUseCase, AtualizarConsultaUseCase atualizarConsultaUseCase, CancelarConsultaUseCase cancelarConsultaUseCase, EncontrarConsultaPorIdUseCase encontrarConsultaUseCase, EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase, EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase, EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase, EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase, EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase, ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase, AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase, AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase, AuthenticatedUserService authenticatedUserService) {
         this.agendarConsultaUseCase = agendarConsultaUseCase;
         this.atualizarConsultaUseCase = atualizarConsultaUseCase;
         this.cancelarConsultaUseCase = cancelarConsultaUseCase;
@@ -51,6 +54,7 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
         this.encontrarTodasConsultasUseCase = encontrarTodasConsultasUseCase;
         this.listarConsultasGraphqlUseCase = listarConsultasGraphqlUseCase;
         this.atualizarConsultaGraphqlUseCase = atualizarConsultaGraphqlUseCase;
+        this.agendarConsultaGraphqlUseCase = agendarConsultaGraphqlUseCase;
         this.authenticatedUserService = authenticatedUserService;
     }
 
@@ -120,5 +124,12 @@ public class ConsultaControllerInputPortImpl implements ConsultaControllerInputP
         logger.info("Atualizando consulta id: {}", request.id());
         UserPrincipal usuarioLogado = authenticatedUserService.getCurrentUserPrincipal();
         return atualizarConsultaGraphqlUseCase.executar(request, usuarioLogado);
+    }
+
+    @Override
+    public ConsultaResponseGraphqlDTO agendarGraphql(AgendarConsultaGraphqlDTO request) {
+        logger.info("Criando consulta para o paciente: {}", request.pacienteId());
+        UserPrincipal usuarioLogado = authenticatedUserService.getCurrentUserPrincipal();
+        return agendarConsultaGraphqlUseCase.executar(request, usuarioLogado);
     }
 }

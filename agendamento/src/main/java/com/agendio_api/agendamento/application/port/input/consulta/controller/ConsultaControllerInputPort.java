@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.consulta.AgendaConsultaD
 import com.agendio_api.agendamento.application.port.dto.consulta.AtualizaConsultaDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaResponseDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AgendarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AtualizarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ListarConsultaGraphqlDTO;
@@ -36,4 +37,6 @@ public interface ConsultaControllerInputPort {
     List<ConsultaResponseGraphqlDTO> listarPorFiltros(ListarConsultaGraphqlDTO filtro);
 
     ConsultaResponseGraphqlDTO atualizarGraphql(AtualizarConsultaGraphqlDTO input);
+
+    ConsultaResponseGraphqlDTO agendarGraphql(AgendarConsultaGraphqlDTO input);
 }
