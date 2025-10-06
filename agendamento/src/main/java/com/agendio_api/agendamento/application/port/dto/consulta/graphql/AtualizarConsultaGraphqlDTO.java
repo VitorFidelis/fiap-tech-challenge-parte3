@@ -17,14 +17,17 @@ public record AtualizarConsultaGraphqlDTO(
         if (id == null) {
             throw new IllegalArgumentException("O ID da consulta é obrigatório");
         }
+
         if (horarioSolicitado != null && horarioSolicitado.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("A data da consulta deve ser futura");
         }
-        if (status == null) {
-            throw new IllegalArgumentException("O status da consulta é obrigatório");
-        }
+
         if (observacoes != null && observacoes.length() > 500) {
             throw new IllegalArgumentException("As observações não podem ultrapassar 500 caracteres");
+        }
+
+        if (horarioSolicitado == null && status == null && observacoes == null) {
+            throw new IllegalArgumentException("Pelo menos um campo deve ser fornecido para a atualização (horário, status ou observações).");
         }
     }
 }

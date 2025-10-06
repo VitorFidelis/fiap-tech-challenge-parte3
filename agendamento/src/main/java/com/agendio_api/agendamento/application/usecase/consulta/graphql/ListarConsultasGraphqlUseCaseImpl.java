@@ -6,10 +6,6 @@ import com.agendio_api.agendamento.application.port.input.consulta.usecase.graph
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaGateway;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
-import com.agendio_api.agendamento.domain.model.usuario.Enfermeiro;
-import com.agendio_api.agendamento.domain.model.usuario.Medico;
-import com.agendio_api.agendamento.domain.model.usuario.Paciente;
-import com.agendio_api.agendamento.domain.model.usuario.Usuario;
 import com.agendio_api.agendamento.infrastructure.exception.AccessDeniedException;
 import com.agendio_api.agendamento.infrastructure.security.UserPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

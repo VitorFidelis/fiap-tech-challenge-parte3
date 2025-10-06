@@ -3,12 +3,14 @@ package com.agendio_api.agendamento.infrastructure.bean.config.consulta;
 import com.agendio_api.agendamento.application.controller.ConsultaControllerInputPortImpl;
 import com.agendio_api.agendamento.application.port.input.consulta.controller.ConsultaControllerInputPort;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.*;
+import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.AgendarConsultaGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.AtualizarConsultaGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.input.consulta.usecase.graphql.ListarConsultasGraphqlUseCase;
 import com.agendio_api.agendamento.application.port.mapper.consulta.IConsultaMapper;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaDataSource;
 import com.agendio_api.agendamento.application.port.output.consulta.ConsultaGateway;
 import com.agendio_api.agendamento.application.usecase.consulta.*;
+import com.agendio_api.agendamento.application.usecase.consulta.graphql.AgendarConsultaGraphqlUseCaseImpl;
 import com.agendio_api.agendamento.application.usecase.consulta.graphql.AtualizarConsultaGraphqlUseCaseImpl;
 import com.agendio_api.agendamento.application.usecase.consulta.graphql.ListarConsultasGraphqlUseCaseImpl;
 import com.agendio_api.agendamento.domain.validator.ConsultaValidator;
@@ -91,6 +93,11 @@ public class ConsultaBeanConfig {
     }
 
     @Bean
+    AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+        return new AgendarConsultaGraphqlUseCaseImpl(consultaGateway, consultaMapper);
+    }
+
+    @Bean
     ConsultaControllerInputPort registerConsultaControllerInputPort(AtualizarConsultaUseCase atualizarConsultaUseCase,
                                                                     CancelarConsultaUseCase cancelarConsultaUseCase,
                                                                     EncontrarConsultaPorIdUseCase encontrarConsultaPorIdUseCase,
@@ -102,6 +109,7 @@ public class ConsultaBeanConfig {
                                                                     AgendarConsultaUseCase agendarConsultaUseCase,
                                                                     ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase,
                                                                     AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase,
+                                                                    AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase,
                                                                     AuthenticatedUserService authenticatedUserService) {
         return new ConsultaControllerInputPortImpl(agendarConsultaUseCase,
                 atualizarConsultaUseCase,
@@ -114,6 +122,7 @@ public class ConsultaBeanConfig {
                 encontrarTodasConsultasUseCase,
                 listarConsultasGraphqlUseCase,
                 atualizarConsultaGraphqlUseCase,
+                agendarConsultaGraphqlUseCase,
                 authenticatedUserService);
     }
 }

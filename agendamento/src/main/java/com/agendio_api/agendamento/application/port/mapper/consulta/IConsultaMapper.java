@@ -4,6 +4,7 @@ import com.agendio_api.agendamento.application.port.dto.consulta.AgendaConsultaD
 import com.agendio_api.agendamento.application.port.dto.consulta.AtualizaConsultaDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaFiltroRequestDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.ConsultaResponseDTO;
+import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AgendarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.AtualizarConsultaGraphqlDTO;
 import com.agendio_api.agendamento.application.port.dto.consulta.graphql.ConsultaResponseGraphqlDTO;
 import com.agendio_api.agendamento.domain.model.consulta.Consulta;
@@ -26,6 +27,8 @@ public interface IConsultaMapper {
     Consulta toDomain(JpaConsultaEntity jpaEntity);
 
     Consulta toDomain(AtualizarConsultaGraphqlDTO dto, Consulta consultaExistente);
+
+    Consulta toDomain(AgendarConsultaGraphqlDTO request);
 
     FiltroBuscaConsulta toFiltroConsulta(ConsultaFiltroRequestDTO dto);
 
