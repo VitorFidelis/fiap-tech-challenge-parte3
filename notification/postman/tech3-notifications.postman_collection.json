@@ -1,11 +1,11 @@
 {
   "info": {
-    "name": "tech3-notifications-v0.0.2",
+    "name": "tech3-notifications",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Auditoria - Lembretes por consultaId",
+      "name": "Auditoria - Lembretes por IdConsulta",
       "request": {
         "method": "GET",
         "header": [],
@@ -19,16 +19,10 @@
           "path": [
             "lembretes",
             "consulta",
-            "{{consultaId}}"
+            "{{idConsulta}}"
           ]
         }
       }
-    }
-  ],
-  "variable": [
-    {
-      "key": "consultaId",
-      "value": "abc-123"
     }
   ]
 }
