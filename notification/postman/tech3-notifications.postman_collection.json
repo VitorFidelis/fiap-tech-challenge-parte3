@@ -1,0 +1,28 @@
+{
+  "info": {
+    "name": "tech3-notifications",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auditoria - Lembretes por IdConsulta",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/lembretes/consulta/{{consultaId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "lembretes",
+            "consulta",
+            "{{idConsulta}}"
+          ]
+        }
+      }
+    }
+  ]
+}

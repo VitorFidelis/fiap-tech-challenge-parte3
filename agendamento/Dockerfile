@@ -6,6 +6,7 @@ WORKDIR /app
 COPY pom.xml .
 # Copiar POM do módulo agendamento
 COPY agendamento/pom.xml ./agendamento/
+COPY notification/pom.xml ./notification/
 
 # Baixar dependências
 RUN mvn dependency:go-offline -B
@@ -14,7 +15,7 @@ RUN mvn dependency:go-offline -B
 COPY agendamento/src ./agendamento/src
 
 # Construir apenas o módulo agendamento
-RUN mvn clean package -pl agendamento -am -DskipTests
+RUN mvn clean package -pl agendamento -am -DskipTests -B
 
 # Stage 2: Runtime
 FROM eclipse-temurin:21-jre
