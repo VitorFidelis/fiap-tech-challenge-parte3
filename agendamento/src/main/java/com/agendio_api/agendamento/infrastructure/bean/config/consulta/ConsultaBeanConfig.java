@@ -14,6 +14,7 @@ import com.agendio_api.agendamento.application.usecase.consulta.graphql.AgendarC
 import com.agendio_api.agendamento.application.usecase.consulta.graphql.AtualizarConsultaGraphqlUseCaseImpl;
 import com.agendio_api.agendamento.application.usecase.consulta.graphql.ListarConsultasGraphqlUseCaseImpl;
 import com.agendio_api.agendamento.domain.validator.ConsultaValidator;
+import com.agendio_api.agendamento.infrastructure.adapter.messaging.rabbitmq.ConsultasPublisher;
 import com.agendio_api.agendamento.infrastructure.adapter.gateway.consulta.ConsultaGatewayImpl;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta.JpaConsultaAdapter;
 import com.agendio_api.agendamento.infrastructure.datasource.jpa.consulta.JpaConsultaRepository;
@@ -37,13 +38,18 @@ public class ConsultaBeanConfig {
     }
 
     @Bean
-    AgendarConsultaUseCase registerAgendarConsultaUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper, List<ConsultaValidator> consultaValidators) {
-        return new AgendarConsultaUseCaseImpl(consultaGateway, consultaMapper, consultaValidators);
+    AgendarConsultaUseCase registerAgendarConsultaUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper, List<ConsultaValidator> consultaValidators,
+            ConsultasPublisher consultasPublisher) {
+        return new AgendarConsultaUseCaseImpl(consultaGateway, consultaMapper, consultaValidators, consultasPublisher);
     }
 
     @Bean
-    AtualizarConsultaUseCase registerAtualizarConsultaUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper, List<ConsultaValidator> consultaValidators) {
-        return new AtualizarConsultaUseCaseImpl(consultaGateway, consultaMapper, consultaValidators);
+    AtualizarConsultaUseCase registerAtualizarConsultaUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper, List<ConsultaValidator> consultaValidators,
+            ConsultasPublisher consultasPublisher) {
+        return new AtualizarConsultaUseCaseImpl(consultaGateway, consultaMapper, consultaValidators,
+                consultasPublisher);
     }
 
     @Bean
@@ -52,65 +58,74 @@ public class ConsultaBeanConfig {
     }
 
     @Bean
-    EncontrarConsultaPorIdUseCase registerEncontrarConsultaPorIdUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarConsultaPorIdUseCase registerEncontrarConsultaPorIdUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new EncontrarConsultaPorIdUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    EncontrarConsultasPorEnfermeiroUseCase registerEncontrarConsultasPorEnfermeiroUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarConsultasPorEnfermeiroUseCase registerEncontrarConsultasPorEnfermeiroUseCase(
+            ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
         return new EncontrarConsultasPorEnfermeiroUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    EncontrarConsultasPorMedicoEPeriodoUseCase registerEncontrarConsultasPorMedicoEPeriodoUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarConsultasPorMedicoEPeriodoUseCase registerEncontrarConsultasPorMedicoEPeriodoUseCase(
+            ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
         return new EncontrarConsultasPorMedicoEPeriodoUseCaseImpl(consultaGateway, consultaMapper) {
         };
     }
 
     @Bean
-    EncontrarConsultasPorMedicoUseCase registerEncontrarConsultasPorMedicoUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarConsultasPorMedicoUseCase registerEncontrarConsultasPorMedicoUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new EncontrarConsultasPorMedicoUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    EncontrarConsultasPorPacienteUseCase registerEncontrarConsultasPorPacienteUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarConsultasPorPacienteUseCase registerEncontrarConsultasPorPacienteUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new EncontrarConsultasPorPacienteUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    EncontrarTodasConsultasUseCase registerEncontrarTodasConsultasUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    EncontrarTodasConsultasUseCase registerEncontrarTodasConsultasUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new EncontrarTodasConsultasUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new ListarConsultasGraphqlUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new AtualizarConsultaGraphqlUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
-    AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase(ConsultaGateway consultaGateway, IConsultaMapper consultaMapper) {
+    AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase(ConsultaGateway consultaGateway,
+            IConsultaMapper consultaMapper) {
         return new AgendarConsultaGraphqlUseCaseImpl(consultaGateway, consultaMapper);
     }
 
     @Bean
     ConsultaControllerInputPort registerConsultaControllerInputPort(AtualizarConsultaUseCase atualizarConsultaUseCase,
-                                                                    CancelarConsultaUseCase cancelarConsultaUseCase,
-                                                                    EncontrarConsultaPorIdUseCase encontrarConsultaPorIdUseCase,
-                                                                    EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase,
-                                                                    EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase,
-                                                                    EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase,
-                                                                    EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase,
-                                                                    EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase,
-                                                                    AgendarConsultaUseCase agendarConsultaUseCase,
-                                                                    ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase,
-                                                                    AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase,
-                                                                    AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase,
-                                                                    AuthenticatedUserService authenticatedUserService) {
+            CancelarConsultaUseCase cancelarConsultaUseCase,
+            EncontrarConsultaPorIdUseCase encontrarConsultaPorIdUseCase,
+            EncontrarConsultasPorEnfermeiroUseCase encontrarConsultasPorEnfermeiroUseCase,
+            EncontrarConsultasPorMedicoEPeriodoUseCase encontrarConsultasPorMedicoEPeriodoUseCase,
+            EncontrarConsultasPorMedicoUseCase encontrarConsultasPorMedicoUseCase,
+            EncontrarConsultasPorPacienteUseCase encontrarConsultasPorPacienteUseCase,
+            EncontrarTodasConsultasUseCase encontrarTodasConsultasUseCase,
+            AgendarConsultaUseCase agendarConsultaUseCase,
+            ListarConsultasGraphqlUseCase listarConsultasGraphqlUseCase,
+            AtualizarConsultaGraphqlUseCase atualizarConsultaGraphqlUseCase,
+            AgendarConsultaGraphqlUseCase agendarConsultaGraphqlUseCase,
+            AuthenticatedUserService authenticatedUserService) {
         return new ConsultaControllerInputPortImpl(agendarConsultaUseCase,
                 atualizarConsultaUseCase,
                 cancelarConsultaUseCase,

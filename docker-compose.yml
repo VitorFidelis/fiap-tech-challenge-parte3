@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "${DB_AGENDAMENTO_PORT:-5433}:5432" # EXPORTA 5433 -> 5432 INTERNO
+      - "${DB_AGENDAMENTO_PORT:-5433}:5432"
     volumes:
       - db_agendamento_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,7 +19,25 @@ services:
       timeout: 5s
       retries: 5
 
-  #Serviço de agendamento de consultas
+  # Banco para notificacao-service
+  db-notificacao:
+    image: postgres:16
+    container_name: db-notificacao
+    environment:
+      POSTGRES_DB: notificacao_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_NOTIFICACAO_PORT:-5434}:5432"
+    volumes:
+      - db_notificacao_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d notificacao_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Serviço de agendamento de consultas
   agendamento-service:
     build:
       context: .
@@ -28,35 +46,60 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Configurações do PostgreSQL - DENTRO DA REDE DOCKER usa porta INTERNA 5432
+      # Postgres do agendamento
       SPRING_DATASOURCE_URL: jdbc:postgresql://db-agendamento:5432/agendamento_db
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
 
-      # JWT
-      APP_JWT_SECRET: ${JWT_SECRET}
-      APP_JWT_EXPIRATION: 86400000
+      # JWT (necessário pelo application.properties)
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+    depends_on:
+      db-agendamento:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
-      # Configurações para comunicação com outros serviços
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-      RABBITMQ_USERNAME: ${RABBITMQ_USER}
-      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+  # Serviço de Notificações
+  notificacao-service:
+    build:
+      context: .
+      dockerfile: notification/Dockerfile
+    container_name: notificacao-service
+    ports:
+      - "8082:8081"   # mapeia para server.port=8081 do application.properties
+    environment:
+      # Postgres do notificacao-service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db-notificacao:5432/notificacao_db
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
 
-      # Configurações Spring adicionais
+      # RabbitMQ (sobrescreve 'localhost' do properties)
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER:-guest}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-guest}
+
+      # Fila de notificações (mantém igual ao properties, com option de override)
+      NOTIFICACOES_QUEUE: ${NOTIFICACOES_QUEUE:-consultas.eventos}
+
+      # JWT (necessário para o bean jwtTokenProvider)
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+
+      # (opcionais) flags comuns
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
       SPRING_FLYWAY_ENABLED: "true"
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
     depends_on:
-      db-agendamento:
+      db-notificacao:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    networks:
-      - default
 
   # RabbitMQ (com painel web)
   rabbitmq:
@@ -76,3 +119,4 @@ services:
 
 volumes:
   db_agendamento_data:
+  db_notificacao_data:

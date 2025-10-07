@@ -41,7 +41,7 @@ public class AgendarConsultaUseCaseImpl implements AgendarConsultaUseCase {
 
         // Converte LocalDateTime -> ISO-8601 com timezone America/Recife
         String dataHoraISO = consultaSalva.getHorarioSolicitado()
-                .atZone(ZoneId.of("America/Recife"))
+                .atZone(ZoneId.of("America/Sao_Paulo"))
                 .toOffsetDateTime()
                 .toString();
 
